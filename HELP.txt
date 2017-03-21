@@ -1,0 +1,16 @@
+http://stackoverflow.com/questions/20272579/django-validate-file-type-of-uploaded-file
+http://stackoverflow.com/questions/6460848/how-to-limit-file-types-on-file-uploads-for-modelforms-with-filefields
+
+http://stackoverflow.com/questions/10498234/django-load-local-json-file
+http://stackoverflow.com/questions/21858465/json-file-reading-by-django
+https://docs.python.org/3/library/json.html
+
+error_messages = {
+     'max_size': ("Ensure this file size is not greater than %(max_size)s."
+                  " Your file size is %(size)s."),
+     'min_size': ("Ensure this file size is not less than %(min_size)s. "
+                  "Your file size is %(size)s."),
+     'content_type': "Files of type %(content_type)s are not supported.",
+}
+
+error_messages['content_type']

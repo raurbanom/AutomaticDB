@@ -1,0 +1,20 @@
+{
+  'attributes': [
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F'
+  ],
+  'functionaldependencies': [
+    { 'x': 'A, B', 'y': 'C' },
+    { 'x': 'D', 'y': 'E, F' },
+    { 'x': 'C', 'y': 'A' },
+    { 'x': 'D, E', 'y': 'C' },
+    { 'x': 'B, C', 'y': 'D' },
+    { 'x': 'C, F', 'y': 'B, D' },
+    { 'x': 'A, C, D', 'y': 'B' },
+    { 'x': 'C, E, D', 'y': 'A, F' }
+  ]
+}

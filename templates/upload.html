@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}{{ block.super }}Upload{% endblock %}
+
+{% block navbar-left %}
+  {% include "_navbar.html" with active_link="home" %}
+{% endblock %}
+
+{% block container %}
+    <h2>Recubrimiento M&iacute;nimo:</h2>
+
+    <div class="form-group">
+        {% comment %}<label>Cargar Relaci&oacute;n</label>{% endcomment %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" id="jsonFile" name="jsonFile" />
+            <br />
+            {% comment %}{{ form.as_p }}{% endcomment %}
+            <button class="btn btn-info" type="submit">Cargar</button>
+        </form>
+        <br />
+        {% if uploaded_file_url %}
+            <div class="alert alert-info" role="alert">
+                Archivo cargado en: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a>
+            </div>
+            <pre> {{ uploaded_file_data }} </pre>
+        {% endif %}
+        {% if uploaded_file_message %}
+            <div class="alert alert-danger" role="alert">
+                {{ uploaded_file_message }}
+            </div>
+        {% endif %}
+
+    </div>
+{% endblock container %}
+
+{% block scripts %}
+    <script src="{% static 'bootstrap/js/bootstrap-filestyle.min.js' %}"></script>
+
+    <script type="application/javascript">
+        $('#jsonFile').filestyle({
+            buttonName : 'btn-info',
+            buttonText : ' Seleccionar archivo JSON'
+        });
+    </script>
+{% endblock scripts %}

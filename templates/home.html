@@ -9,9 +9,41 @@
 {% endblock %}
 
 {% block container %}
-    <div class="jumbotron">
-        <h1>Jumbotron heading</h1>
-        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-        <p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p>
+
+    <div id="sec1" class="text-page">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <h1>Calcular Recubrimiento M&iacute;nimo</h1>
+          </div>
+        </div>
       </div>
+    </div>
+
+    <div id="sec2" class="text-page">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="text-center">
+                <a href="{% url 'upload' %}">
+                    <img class="img-circle centered" src="{% static 'site/image/json.png' %}" alt="profile pic">
+                </a>
+            </div>
+            {% comment %}<p class="heavy text-center">JSON</p>{% endcomment %}
+            <h2>Cargar JSON</h2>
+            <p>C&aacute;lculo de recubrimiento mediante datos cargados desde un archivo JSON.</p>
+          </div>
+          <div class="col-lg-6">
+            <div class="text-center">
+                <a href="{% url 'manual' %}">
+                    <img class="img-circle centered" src="{% static 'site/image/computer.png' %}" alt="profile pic">
+                </a>
+            </div>
+            {% comment %}<p class="heavy text-center">Datos</p>{% endcomment %}
+            <h2>Ingresar manualmente</h2>
+            <p>C&aacute;lculo de recubrimiento mediante datos ingresados manualmente.</p>
+          </div>
+        </div>
+    </div>
+    </div>
 {% endblock container %}
