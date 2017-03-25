@@ -1,15 +1,20 @@
-import json
-import re, string
+import os
+
+from AutomaticDB import settings
 from RecubrimientoMinimo import RecubrimientoMinimo
 
-path = "D:\\file.json"
 
-re = RecubrimientoMinimo(path)
-print("")
+filename = "file_test.json"
+path = os.path.join(settings.MEDIA_ROOT, filename)
+
+# path = "D:\\file.json"
+
+recubrimiento = RecubrimientoMinimo(path)
+
 print("*********Inicial*********")
-listaL0X, listaL0Y = re.descomponer()
+listaL0X, listaL0Y = recubrimiento.get_descomposicion()
 
-print("")
+
 print("*********Algoritmo L0 Descomposicion*********")
 
-print (re.imprimirDescomposicion())
+print (recubrimiento.print_descomposicion())

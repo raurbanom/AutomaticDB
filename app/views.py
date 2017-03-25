@@ -108,7 +108,7 @@ def validate_file_type(json_file):
 
 def process_file(filename):
     path = os.path.join(settings.MEDIA_ROOT, filename)
-    print(path)
+    # print(path)
 
     # Read file
     f = open(path)
@@ -116,7 +116,7 @@ def process_file(filename):
     f.close()
 
     # Convert json string to python object
-    #data = json.loads(json_string)
+    # data = json.loads(json_string)
 
     """json_object = json.load(json_string)  # deserialize it
     json_string = json.dumps(json_data)  # json formatted string

@@ -1,50 +1,57 @@
 import json
-import re, string
+
 
 class RecubrimientoMinimo(object):
 
     def __init__(self, path):
-        """
-        :type path: string
-        """
         self.path = path
-        self.file_text = self.get_file_text()
-        self.diccionario = dict(json.loads(self.file_text))
+
         self.listaL0X = []
         self.listaL0Y = []
 
+        self.file_text = self.get_file_text(path)
+        text_json = json.loads(self.file_text)
+        self.diccionario = dict(text_json)
 
-    def get_file_text(self):
-        file_io = open(self.path, "r")
+    @staticmethod
+    def get_file_text(path):
+        file_io = open(path, 'r')
         text = file_io.read()
         file_io.close()
+
         return text
 
-    def descomponer(self):
-
+    def get_descomposicion(self):
         abc = self.diccionario.values()
-
         cantidad = abc[1].__len__()
 
         for i in range(cantidad):
-            diccFD =  dict(json.loads(str(json.dumps(abc[1][i]))))
+            dicStr = str(json.dumps(abc[1][i]))
+            diccFD = dict(json.loads(dicStr))
+
             listaX = [diccFD['x'].split(',')]
             listaY = [diccFD["y"].split(',')]
-            print(str(listaX).replace('u','') + '  ->  ' + str(listaY).replace('u',''))
+
+            # print(str(listaX).replace('u', '') + '  ->  ' + str(listaY).replace('u', ''))
             cantImplicado = listaY[0].__len__()
+
             if cantImplicado > 1:
-                for j in range(cantImplicado):
+                for index in range(cantImplicado):
                     self.listaL0X.append(listaX[0])
-                    self.listaL0Y.append(listaY[0][j])
+                    self.listaL0Y.append(listaY[0][index])
             else:
                 self.listaL0X.append(listaX[0])
                 self.listaL0Y.append(listaY[0][0])
 
         return self.listaL0X, self.listaL0Y
 
-    def imprimirDescomposicion(self):
+    def print_descomposicion(self):
+
         resultDescomposicion = ""
-        cantl0 = self.listaL0X.__len__()
-        for z in range(cantl0):
-             resultDescomposicion = resultDescomposicion + str(self.listaL0X[z]).replace('u', '') + ' -> ' + str(self.listaL0Y[z] + "\n" )
+        length = self.listaL0X.__len__()
+
+        for index in range(length):
+            resultDescomposicion = resultDescomposicion + \
+                                   str(self.listaL0X[index]).replace('u', '') + ' -> ' + \
+                                   str(self.listaL0Y[index] + "\n")
         return resultDescomposicion

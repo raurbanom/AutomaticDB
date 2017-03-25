@@ -1,5 +1,5 @@
 import json
-import re, string
+
 
 def get_file_text(path):
     file_io = open(path, "r")
