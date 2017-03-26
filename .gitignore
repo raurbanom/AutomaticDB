@@ -1,6 +1,8 @@
 # Add any directories, files, or patterns you don't want to be tracked by version control
 .idea/
 *.pyc
+.pyc
 app/*.pyc
 AutomaticDB/*.pyc
-# media/*.json
+media/*.json
+

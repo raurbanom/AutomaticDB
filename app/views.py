@@ -7,6 +7,12 @@ from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
 from RecubrimientoMinimo import RecubrimientoMinimo
 
+error_messages = {
+     'file_required': "Archivo JSON es requerido. Por favor, intente nuevamente.",
+     'file_process': "No se pudo procesar el archivo. Por favor, intente nuevamente",
+     'file_type': "Tipo de archivo no válido. Por favor, intente nuevamente",
+}
+
 
 def base(request):
     return render(request, 'base.html')
@@ -14,10 +20,6 @@ def base(request):
 
 def home(request):
     return render(request, 'home.html')
-
-
-def result(request):
-    return render(request, 'result.html')
 
 
 def upload(request):
@@ -29,11 +31,8 @@ def upload(request):
                 response = upload_json(request)
             else:
                 response = {
-                    "uploaded_file_message": "Archivo JSON es requerido. Por favor, intente nuevamente."
+                    "uploaded_file_message": error_messages["file_required"]
                 }
-
-            # if "uploaded_file_active" in response:
-            #     print("uploaded_file_active" + str(response['uploaded_file_active']))
 
             return render(request, "upload.html", response)
 
@@ -59,31 +58,6 @@ def get_extension(filename):
     return file_type
 
 
-"""
-def clean_file(file):
-    try:
-        if file:
-            file_type = file.content_type.split('/')[0]
-            print(file_type)
-
-            if len(file.name.split('.')) == 1:
-                return False # _('File type is not supported')
-
-            if file_type in settings.VALID_FILE_MIMETYPES:
-                return  True
-            else:
-                return False # _('File type is not supported')
-    except:
-        pass
-
-    return file
-"""
-
-
-# ----------------------------------------
-# -
-# -------------------------------------------
-
 # ------------------------------------------------------------------------
 # HELPERS
 # ------------------------------------------------------------------------
@@ -100,7 +74,6 @@ def upload_json(request):
 
             # Check file
             if is_json(filename):
-                # data = process_file(filename)
                 path = os.path.join(settings.MEDIA_ROOT, filename)
 
                 recubrimiento = RecubrimientoMinimo(path)
@@ -118,11 +91,11 @@ def upload_json(request):
                 }
             else:
                 return {
-                    "uploaded_file_message": "No se pudo procesar el archivo. Por favor, intente nuevamente"
+                    "uploaded_file_message": error_messages["file_process"]
                 }
         else:
             return {
-                "uploaded_file_message": "Tipo de archivo no válido. Por favor, intente nuevamente"
+                "uploaded_file_message": error_messages["file_type"]
             }
 
 

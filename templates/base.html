@@ -21,61 +21,61 @@
 
 </head>
 <body>
-    <!-- Fixed navbar -->
-    {% block navbar %}
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-          <div class="container">
+<!-- Fixed navbar -->
+{% block navbar %}
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
             <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="{% url 'home' %}">
-                  {% block navbar-brand %}
-                    {% include "_brandname.html" %}
-                  {% endblock %}
-              </a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    {% block navbar-brand %}
+                        {% include "_brandname.html" %}
+                    {% endblock %}
+                </a>
             </div>
-              {% block navbar-menu %}
+            {% block navbar-menu %}
                 <div id="navbar" class="collapse navbar-collapse">
-                  <ul class="nav navbar-nav">
-                      {% block navbar-left %}{% endblock %}
-                  </ul>
+                    <ul class="nav navbar-nav">
+                        {% block navbar-left %}{% endblock %}
+                    </ul>
                 </div><!--/.nav-collapse -->
-              {% endblock %}
-          </div>
-        </nav>
+            {% endblock %}
+        </div>
+    </nav>
+{% endblock %}
+
+<!-- Begin page content -->
+<div class="container">
+    {% block container %}
+        <div class="page-header">
+            <h1>Sticky footer with fixed navbar</h1>
+        </div>
+        <p class="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added with <code>padding-top: 60px;</code> on the <code>body &gt; .container</code>.</p>
+        <p>Back to <a href="#">the default sticky footer</a> minus the navbar.</p>
+    {% endblock container %}
+</div>
+
+<!-- Site footer -->
+<footer class="footer">
+    {% block footer %}
+        <div class="container">
+            <p class="text-muted text-center">Universidad Distrital Francisco Jos&eacute; de Caldas &copy; {% now 'Y' %}</p>
+        </div>
     {% endblock %}
+</footer>
 
-    <!-- Begin page content -->
-    <div class="container">
-        {% block container %}
-            <div class="page-header">
-                <h1>Sticky footer with fixed navbar</h1>
-            </div>
-            <p class="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added with <code>padding-top: 60px;</code> on the <code>body &gt; .container</code>.</p>
-            <p>Back to <a href="#">the default sticky footer</a> minus the navbar.</p>
-        {% endblock container %}
-    </div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<script src="{% static 'libs/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 
-    <!-- Site footer -->
-    <footer class="footer">
-        {% block footer %}
-            <div class="container">
-                <p class="text-muted text-center">Universidad Distrital Francisco Jos&eacute; de Caldas &copy; {% now 'Y' %}</p>
-            </div>
-        {% endblock %}
-    </footer>
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <script src="{% static 'libs/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-
-    {% block scripts %}
-    {% endblock scripts %}
+{% block scripts %}
+{% endblock scripts %}
 
 </body>
 </html>

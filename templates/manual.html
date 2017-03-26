@@ -5,55 +5,48 @@
 {% block title %}{{ block.super }}Manual{% endblock %}
 
 {% block navbar-left %}
-  {% include "_navbar.html" with active_link="home" %}
+    {% include "_navbar.html" with active_link="home" %}
 {% endblock %}
 
 {% block container %}
     <h2>Recubrimiento M&iacute;nimo:</h2>
+
     <div class="form-group">
-        <div class="form-group">
-            <label for="attibutes">Conjunto de Atributos:</label>
-            <input type="text" class="form-control" id="attibutes">
+        <label for="x">Conjunto de Atributos:</label>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">T</span>
+                        <input class="form-control" placeholder="Atributos" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="form-group">
-        <div class="form-group">
-            <label for="x">Conjunto de Dependencias Funcionales:</label>
-            <div class="input-group">
-	            <span class="input-group-addon" id="basic-addon1">X</span>
-	            <input class="form-control" placeholder="Implicante" aria-describedby="basic-addon1">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="input-group">
-	            <span class="input-group-addon" id="basic-addon1">Y</span>
-	            <input class="form-control" placeholder="Implicado" aria-describedby="basic-addon1">
-            </div>
-        </div>
 
+    <div class="form-group">
+        <label for="x">Conjunto de Dependencias Funcionales:</label>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">X</span>
+                        <input class="form-control" placeholder="Implicante" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Y</span>
+                        <input class="form-control" placeholder="Implicado" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+            </div>
+        </div>
         <button type="submit" class="btn btn-default">Agregar</button>
     </div>
-
-{% comment %}    <form class="form-group">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <input type="checkbox" aria-label="Checkbox for following text input" />
-                    </span>
-                    <input class="form-control" aria-label="Text input with checkbox" />
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <input type="radio" aria-label="Radio button for following text input" />
-                    </span>
-                    <input class="form-control" aria-label="Text input with radio button" />
-                </div>
-            </div>
-        </div>
-    </form>{% endcomment %}
 
 {% endblock container %}
 
