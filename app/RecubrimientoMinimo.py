@@ -16,6 +16,9 @@ class RecubrimientoMinimo(object):
         text_json = json.loads(self.file_text)
         self.diccionario = dict(text_json)
 
+        self.result_operacionesXL0 = []
+        self.result_operacionesYL0 = []
+
     def get_descomposicion(self):
         dictionary_data = self.diccionario.values()
         length = dictionary_data[1].__len__()
@@ -27,18 +30,34 @@ class RecubrimientoMinimo(object):
             listaX = [diccFD['x'].split(',')]
             listaY = [diccFD["y"].split(',')]
 
-            # print(str(listaX).replace('u', '') + '  ->  ' + str(listaY).replace('u', ''))
+            #print(str(listaX).replace('u', '') + '  ->  ' + str(listaY).replace('u', ''))
             cantImplicado = listaY[0].__len__()
 
             if cantImplicado > 1:
+                self.result_operacionesXL0.append(listaX[0][0])
+                self.result_operacionesYL0.append(listaY[0])
                 for index in range(cantImplicado):
                     self.listaL0X.append(listaX[0])
                     self.listaL0Y.append(listaY[0][index])
             else:
                 self.listaL0X.append(listaX[0])
                 self.listaL0Y.append(listaY[0][0])
-
         return self.listaL0X, self.listaL0Y
+
+    def get_operaciones_L0(self):
+        result1 = ""
+        result2 = ""
+        result3 = ""
+        cant = self.result_operacionesXL0.__len__()
+        for i in range(cant):
+            cantImplicado = self.result_operacionesYL0[0].__len__()
+            result1 = ""
+            result1 = str(self.result_operacionesXL0[i]) + " --> " + str(self.result_operacionesYL0[i]).replace('u', '').replace('[', '').replace(']', '').replace("'", '').replace(',', '').replace(' ', '')
+            for j in range(cantImplicado):
+                result2 = result2 + (str(self.result_operacionesXL0[i]) + ' --> ' + str(self.result_operacionesYL0[i][j])) + '\n'
+            result3 = result3 + ("Descomponer => " + result1 + "\n" + result2 + "\n")
+            result2 = ""
+        return result3
 
     def atributos_extranos(self, debug):
         i = 0
