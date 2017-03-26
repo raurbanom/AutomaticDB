@@ -137,6 +137,51 @@ class RecubrimientoMinimo(object):
     # Aplica el cierre
     def cierre(self, cadenaI, debug):
         cadenaF = str(cadenaI)
+        if debug == 1:
+            print("Empezamos cierre" + "=>" + cadenaF)
+        Suma_DF = True
+        while Suma_DF:
+            Suma_DF = False
+            i = 0
+            for listAux in self.listaL0X:
+                cadena_aux = str("")
+                for value in listAux:
+                    cadena_aux = cadena_aux + str(value)
+                if debug == 1:
+                    print("cadena aux" + "=>" + cadena_aux)
+                    print("cadena final" + "=>" + cadenaF)
+                if str(cadenaF).__len__() > 1:
+                    if (str(cadenaF).__len__() == str(cadena_aux).__len__()) or (
+                                str(cadena_aux).__len__() < str(cadenaF).__len__()):
+                        if str(cadena_aux).__len__() > str(cadenaF).__len__():
+                            cadena1 = str(cadena_aux)
+                            cadena2 = str(cadenaF)
+                        else:
+                            cadena1 = str(cadenaF)
+                            cadena2 = str(cadena_aux)
+                        if self.buscar_cadena(str(cadena1), str(cadena2), debug) != False:
+                            if str(cadenaF).find(str(self.listaL0Y[i])) == -1:
+                                if debug == 1:
+                                    print("i" + str(i))
+                                cadenaF = str(cadenaF) + str(self.listaL0Y[i])
+                                Suma_DF = True
+                        if debug == 1:
+                            print("cadena final" + "=>" + cadenaF)
+                else:
+                    if debug == 1:
+                        print("cadena aux" + "=>" + cadena_aux)
+                        print("cadena final" + "=>" + cadenaF)
+                    if cadenaF == cadena_aux:
+                        cadenaF = cadenaF + str(self.listaL0Y[i])
+                        Suma_DF = True
+                    if debug == 1:
+                        print("cadena final" + "=>" + cadenaF)
+                i = i + 1
+        return cadenaF
+
+    # Aplica el cierre
+    def cierre_original(self, cadenaI, debug):
+        cadenaF = str(cadenaI)
 
         if debug == 1:
             print("Empezamos cierre" + "=>" + cadenaF)
@@ -293,8 +338,8 @@ class RecubrimientoMinimo(object):
         length = self.listaL2X.__len__()
 
         for z in range(length):
-            result += str(self.listaL2X[z]).replace('u', '').replace('[', '').replace(']', '').replace("'", "").replace(',', '').replace(' ', '') + "\t --> " + \
-                                   str(self.listaL2Y[z]).replace('u', '') + "\n"
+            result += self.utilidad.LImpiarCadena(str(self.listaL2X[z])) + "\t --> " + \
+                      str(self.listaL2Y[z]).replace('u', '') + "\n"
 
         return result
 
