@@ -11,6 +11,9 @@ class RecubrimientoMinimo(object):
         self.listaL1X = []
         self.listaL1Y = []
 
+        self.listaL2X = []
+        self.listaL2Y = []
+
         # read data file
         self.file_text = self.get_file_text(path)
         text_json = json.loads(self.file_text)
@@ -284,3 +287,130 @@ class RecubrimientoMinimo(object):
                                    str(self.listaL1Y[z]).replace('u', '') + "\n"
 
         return result
+
+    def print_resultado(self):
+        result = ""
+        length = self.listaL2X.__len__()
+
+        for z in range(length):
+            result += str(self.listaL2X[z]).replace('u', '').replace('[', '').replace(']', '').replace("'", "").replace(',', '').replace(' ', '') + "\t --> " + \
+                                   str(self.listaL2Y[z]).replace('u', '') + "\n"
+
+        return result
+
+    # Aplica el cierre
+    def cierre_redundante(self, cadenaI, listaX, listaY, debug):
+        cadenaF = str(cadenaI)
+        if debug == 1:
+            print("Empezamos cierre" + "=>" + cadenaF)
+        Suma_DF = True
+        while Suma_DF:
+            Suma_DF = False
+            i = 0
+            for listAux in listaX:
+                cadena_aux = str("")
+                for value in listAux:
+                    cadena_aux = cadena_aux + str(value)
+                if debug == 1:
+                    print("cadena aux" + "=>" + cadena_aux)
+                    print("cadena final" + "=>" + cadenaF)
+                if str(cadenaF).__len__() > 1:
+                    if (str(cadenaF).__len__() == str(cadena_aux).__len__()) or (
+                        str(cadena_aux).__len__() < str(cadenaF).__len__()):
+                        if str(cadena_aux).__len__() > str(cadenaF).__len__():
+                            cadena1 = str(cadena_aux)
+                            cadena2 = str(cadenaF)
+                        else:
+                            cadena1 = str(cadenaF)
+                            cadena2 = str(cadena_aux)
+                        if self.buscar_cadena(str(cadena1), str(cadena2), debug) != False:
+                            if str(cadenaF).find(str(listaY[i])) == -1:
+                                if debug == 1:
+                                    print("i" + str(i))
+                                cadenaF = str(cadenaF) + str(listaY[i])
+                                Suma_DF = True
+                        if debug == 1:
+                            print("cadena final" + "=>" + cadenaF)
+                else:
+                    if debug == 1:
+                        print("cadena aux" + "=>" + cadena_aux)
+                        print("cadena final" + "=>" + cadenaF)
+                    if cadenaF == cadena_aux:
+                        cadenaF = cadenaF + str(listaY[i])
+                        Suma_DF = True
+                    if debug == 1:
+                        print("cadena final" + "=>" + cadenaF)
+                i = i + 1
+        return cadenaF
+
+    # Arma el cierr y aplica tributos extrtanos
+    def armar_cierre_redundantes(self, list_a_cerrar, implicado, listaX, listaY, debug):
+        if debug == 1:
+            print("Entro validar_cierre", str(list_a_cerrar) + "=>" + str(implicado))
+        i = 0
+        validacion = False
+        cadena = ''
+        for caracter in list_a_cerrar:
+            if debug == 1:
+                print("Caracter" + caracter)
+            cadena = cadena + caracter
+            i = i + 1
+        if debug == 1:
+            print("Cadena armada" + cadena)
+        cadena_cierre = self.cierre_redundante(str(cadena), listaX, listaY, debug)
+        if debug == 1:
+            print("despues de cierre " + str(cadena_cierre), "Implicado " + str(implicado))
+        if str(cadena_cierre).__len__() > str(implicado).__len__():
+            cadena1 = str(cadena_cierre)
+            cadena2 = str(implicado)
+        else:
+            cadena1 = str(implicado)
+            cadena2 = str(cadena_cierre)
+        if self.buscar_cadena(cadena1, cadena2, debug) != False:
+            validacion = True
+        return validacion
+
+    # dependencias redundantes.
+    def dependencias_redundantes(self, debug):
+        i = 0
+        #listaL2X = []
+        #listaL2Y = []
+        listaAuxX = []
+        listaAuxY = []
+        listAux = []
+        for listAux in self.listaL1X:
+            listCierre = []
+            for value in listAux:
+                listCierre.append(value)
+            if debug == 1:
+                print("Paso listCierre => " + str(i) + " " + str(listCierre))
+            for z in range(self.listaL1X.__len__()):
+                listaAuxX.insert(z, self.listaL1X[z])
+                listaAuxY.insert(z, self.listaL1Y[z])
+            listaAuxX.pop(i)
+            listaAuxY.pop(i)
+            if debug == 1:
+                print("Paso lista_sin_AEX " + str(i) + " " + str(self.listaL1X))
+                print("Paso lista_sin_AEY " + str(i) + " " + str(self.listaL1Y))
+                print("Paso lista_sin_AEY[i] " + str(i) + " " + str(self.listaL1Y[i]))
+                print("Paso listaAuxX " + str(i) + " " + str(listaAuxX))
+                print("Paso listaAuxY " + str(i) + " " + str(listaAuxY))
+            hay_redundancia = self.armar_cierre_redundantes(listCierre, self.listaL1Y[i], listaAuxX, listaAuxY, debug)
+            if debug == 1:
+                print("Paso hay_redundancia " + str(i) + " " + str(hay_redundancia))
+            if hay_redundancia != True:
+                self.listaL2X.insert(i, self.listaL1X[i])
+                self.listaL2Y.insert(i, self.listaL1Y[i])
+            else:
+                if debug == 1:
+                    print("Eliminamos " + str(i) + " " + str(self.listaL1X[i]) + "=>" + str(self.listaL1Y[i]))
+                self.listaL1X[i] = []
+                self.listaL1Y[i] = []
+                # i=i-1
+            # Limpiamos la lista
+            listaAuxX = []
+            listaAuxY = []
+            i = i + 1
+        return self.listaL2X, self.listaL2Y
+
+

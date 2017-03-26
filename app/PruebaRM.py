@@ -23,3 +23,10 @@ print("*********Algoritmo L1 Atributos Extranios*********")
 lista_sin_AEX, lista_sin_AEY = recubrimiento.atributos_extranos(0)
 
 print (recubrimiento.print_extranios())
+
+print("*********Algoritmo L2 Dependencias Redundantes*********")
+
+lista_Rta_X, lista_Rta_Y = recubrimiento.dependencias_redundantes(0)
+
+print (recubrimiento.print_resultado())
+
