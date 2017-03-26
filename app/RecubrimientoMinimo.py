@@ -1,5 +1,5 @@
 import json
-
+from Utilidades import Utilidades
 
 class RecubrimientoMinimo(object):
     def __init__(self, path):
@@ -18,6 +18,8 @@ class RecubrimientoMinimo(object):
 
         self.result_operacionesXL0 = []
         self.result_operacionesYL0 = []
+        self.result_operacionCierreL1 = []
+        self.utilidad = Utilidades()
 
     def get_descomposicion(self):
         dictionary_data = self.diccionario.values()
@@ -50,7 +52,7 @@ class RecubrimientoMinimo(object):
         cant = self.result_operacionesXL0.__len__()
         for i in range(cant):
             cantImplicado = self.result_operacionesYL0[0].__len__()
-            result1 = str(self.result_operacionesXL0[i]) + " --> " + str(self.result_operacionesYL0[i]).replace('u', '').replace('[', '').replace(']', '').replace("'", '').replace(',', '').replace(' ', '')
+            result1 = str(self.result_operacionesXL0[i]) + " --> " + self.utilidad.LImpiarCadena(str(self.result_operacionesYL0[i]))
             for j in range(cantImplicado):
                 result2 = result2 + (str(self.result_operacionesXL0[i]) + '\t --> ' + str(self.result_operacionesYL0[i][j])) + '\n'
             result3 += "Descomponer: " + result1 + "\n" + result2 + "\n"
@@ -66,7 +68,10 @@ class RecubrimientoMinimo(object):
             j = 0
             list_resultado = []
             if debug == 1:
-                print("Paso " + str(i) + " " + str(listAux))
+                print(str(i) + ") (" + self.utilidad.LImpiarCadena(str(listAux)) + ')+')
+                self.result_operacionCierreL1.append(
+                    str(i + 1) + ") (" + self.utilidad.LImpiarCadena(str(listAux)) + ')+')
+                # print("Paso " + str(i) + " (" + str(listAux).replace('u', '').replace(',', '').replace('[', '').replace(']', '').replace(' ', '').replace("'", '') + ')+' )
             listCierre = []
             for value in listAux:
                 listCierre.append(value)
@@ -74,19 +79,27 @@ class RecubrimientoMinimo(object):
             if j == 1:
                 valida_lista_x = self.buscar_lista(listaL1X, self.listaL0X[i])
                 if debug == 1:
-                    print("Paso " + str(i) + " Resultado X " + str(valida_lista_x))
+                    print("   Resultado: " + self.utilidad.LImpiarCadena(str(listAux)))
+                    self.result_operacionCierreL1.append("   Resultado: " + self.utilidad.LImpiarCadena(str(listAux)) + '\n')
+                    print("")
+                    # print("Paso " + str(i) + " Resultado X " + str(valida_lista_x).replace('u', '').replace(',', '').replace('[', '').replace(']', '').replace(' ', '').replace("'", ''))
                 if valida_lista_x == -1 or (valida_lista_x != -1 and listaL1Y[valida_lista_x] != self.listaL0Y[i]):
                     listaL1X.append(self.listaL0X[i])
                     listaL1Y.append(self.listaL0Y[i])
             else:
                 if debug == 1:
-                    print("Lista a cerrar: " + str(listCierre))
+                    print("    Calcular: (" + self.utilidad.LImpiarCadena(str(listCierre)) + ')+')
+                    self.result_operacionCierreL1.append(
+                        "    Calcular: (" + self.utilidad.LImpiarCadena(str(listCierre)) + ')+')
                 list_resultado = self.armar_cierre(listCierre, self.listaL0Y[i], 0)
                 if debug == 1:
-                    print("Paso " + str(i) + " Resultado " + str(list_resultado))
+                    print("    Resultado: " + self.utilidad.LImpiarCadena(str(list_resultado)))
+                    self.result_operacionCierreL1.append(
+                        "    Resultado: " + self.utilidad.LImpiarCadena(str(list_resultado)) + '\n')
                 valida_lista_x = self.buscar_lista(listaL1X, list_resultado)
                 if debug == 1:
-                    print("Paso " + str(i) + " Resultado X " + str(valida_lista_x))
+                    print("")
+                    # print("Paso " + str(i) + " Resultado X " + str(valida_lista_x))
                 if valida_lista_x == -1 or (valida_lista_x != -1 and listaL1Y[valida_lista_x] != self.listaL0Y[i]):
                     listaL1X.append(list_resultado)
                     listaL1Y.append(self.listaL0Y[i])
@@ -96,6 +109,13 @@ class RecubrimientoMinimo(object):
         self.listaL1Y = listaL1Y
 
         return listaL1X, listaL1Y
+
+    def get_operacines_L1(self):
+        cant = self.result_operacionCierreL1.__len__()
+        result = ""
+        for i in range(cant):
+            result = result + str(self.result_operacionCierreL1[i]) + "\n"
+        return result
 
     # Busca la cadena 2 en la 1
     def buscar_cadena(self, cadena1, cadena2, debug):
@@ -250,7 +270,7 @@ class RecubrimientoMinimo(object):
         length = self.listaL0X.__len__()
 
         for index in range(length):
-            result += str(self.listaL0X[index]).replace('u', '').replace('[', '').replace(']', '').replace("'", '').replace(',', '').replace(' ', '') + '\t --> ' +\
+            result += self.utilidad.LImpiarCadena(str(self.listaL0X[index])) + '\t --> ' +\
                       str(self.listaL0Y[index]) + "\n"
 
         return result + '\n'
@@ -260,7 +280,7 @@ class RecubrimientoMinimo(object):
         length = self.listaL1X.__len__()
 
         for z in range(length):
-            result += str(self.listaL1X[z]).replace('u', '').replace('[', '').replace(']', '').replace("'", "").replace(',', '').replace(' ', '') + "\t --> " + \
+            result += self.utilidad.LImpiarCadena(str(self.listaL1X[z])) + "\t --> " + \
                                    str(self.listaL1Y[z]).replace('u', '') + "\n"
 
         return result
