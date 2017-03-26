@@ -235,7 +235,7 @@ class RecubrimientoMinimo(object):
 
         for index in range(length):
             resultDescomposicion = resultDescomposicion + \
-                                   str(self.listaL0X[index]).replace('u', '') + ' --> ' + \
+                                   str(self.listaL0X[index]).replace('u', '').replace('[', '').replace(']', '').replace("'", '').replace(',', '').replace(' ', '') + ' --> ' + \
                                    str(self.listaL0Y[index]) + "\n"
         return resultDescomposicion
 
@@ -245,10 +245,7 @@ class RecubrimientoMinimo(object):
 
         for z in range(length):
             resultExtranios = resultExtranios + \
-                                   str(self.listaL1X[z]).replace('u', '') + " --> " + \
+                                   str(self.listaL1X[z]).replace('u', '').replace('[', '').replace(']', '').replace("'", "").replace(',', '').replace(' ', '') + " --> " + \
                                    str(self.listaL1Y[z]).replace('u', '') + "\n"
 
         return resultExtranios
-
-
-
