@@ -10,15 +10,26 @@
 
 {% block container %}
     <h2>Recubrimiento M&iacute;nimo:</h2>
-
+    <br />
     <div class="form-group">
-        <label for="x">Conjunto de Atributos:</label>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="x">Conjunto de Atributos:</label>
+                    <button tabindex="0" id="btnHelperAttributes" type="button" class="btn btn-default float-right" data-placement="top"
+                            data-toggle="popover" title="Ayuda" aria-label="Justify"
+                            data-content="Ingresar cada atributo separado por coma. Ejemplo: 'A ,B, C'">
+                        <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
                     <div class="input-group">
-                        <span class="input-group-addon" id="basic-addon1">T</span>
-                        <input class="form-control" placeholder="Atributos" aria-describedby="basic-addon1">
+                        <span class="input-group-addon" id="basic-attributes">T</span>
+                        <input id="txtAttributes" name="txtAttributes" class="form-control" placeholder="Atributos" aria-describedby="basic-attributes">
                     </div>
                 </div>
             </div>
@@ -26,6 +37,33 @@
     </div>
 
     <div class="form-group">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="x">Conjunto de Dependencias Funcionales:</label>
+                    <button tabindex="0" id="btnHelperDependencies" type="button" class="btn btn-default float-right" data-placement="top"
+                            data-toggle="popover" title="Ayuda" aria-label="Justify"
+                            data-content="Ingresar cada implicado e implicante separado por coma. Ejemplo: 'A, B, C --> A ,B'">
+                        <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-dependencies">DF</span>
+                        <input id="txtDependencies" name="txtDependencies" class="form-control" placeholder="Dependencias Funcionales" aria-describedby="basic-dependencies">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="btProcess" name="btnProcess" type="submit" class="btn btn-success">Procesar</button>
+    </div>
+
+    {% comment %}    <div class="form-group">
         <label for="x">Conjunto de Dependencias Funcionales:</label>
         <div class="row">
             <div class="col-sm-6">
@@ -46,12 +84,27 @@
             </div>
         </div>
         <button type="submit" class="btn btn-default">Agregar</button>
-    </div>
+    </div>{% endcomment %}
 
 {% endblock container %}
 
 {% block scripts %}
     <script type="application/javascript">
-        // Empty
+        $(function () {
+            var $helpers = $('#btnHelperAttributes, #btnHelperDependencies');
+            $helpers.popover({
+                /* trigger : 'hover',
+                delay: {
+                    show: "500",
+                    hide: "100"
+                }*/
+            });
+
+            $helpers.on('shown.bs.popover', function() {
+                setTimeout(function() {
+                    $helpers.popover('hide');
+                }, 5000);
+            });
+        });
     </script>
 {% endblock scripts %}

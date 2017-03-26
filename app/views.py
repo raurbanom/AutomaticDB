@@ -23,8 +23,6 @@ def home(request):
 
 
 def upload(request):
-    active = False
-
     if request.POST:
         if 'btnUpload' in request.POST:
             if request.method == 'POST' and (request.FILES and request.FILES['fileJson']):
@@ -77,10 +75,24 @@ def upload_json(request):
                 path = os.path.join(settings.MEDIA_ROOT, filename)
 
                 recubrimiento = RecubrimientoMinimo(path)
-                recubrimiento.get_descomposicion()
 
-                data = recubrimiento.get_operaciones_L0()
+                recubrimiento.get_descomposicion()
+                data = "1. Dependencias Elementales\n"
+                data += recubrimiento.get_operaciones_L0()
+                data += "1.1 Resultado L0 \n"
                 data += recubrimiento.print_descomposicion()
+
+                recubrimiento.atributos_extranos()
+                data += "\n2. Atributos Extraños\n"
+                data += recubrimiento.get_operaciones_L1()
+                data += "2.1 Resultado L1\n"
+                data += recubrimiento.print_extranios()
+
+                recubrimiento.dependencias_redundantes()
+                data += "\n3. Dependencias Funcionales Redundantes\n"
+                data += recubrimiento.print_resultado()
+                data += "3.1 Resultado L2\n"
+
             else:
                 data = ""
 

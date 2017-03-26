@@ -6,3 +6,7 @@ img.img-circle.centered {
 .panel-body pre {
     max-height: 400px;
 }
+
+button.float-right {
+    float: right;
+}
