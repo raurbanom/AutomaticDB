@@ -1,3 +1,38 @@
+import json
+import re, string
+
+def get_file_text(path):
+    file_io = open(path, "r")
+    text = file_io.read()
+    file_io.close()
+    return text
+
+path = "H:\\ProjectPython\\untitled\\1.json"
+file_text = get_file_text(path)
+diccionario = dict(json.loads(file_text))
+abc = diccionario.values()
+
+print("")
+print("*********Inicial*********")
+cantidad = abc[1].__len__()
+listaL0X = []
+listaL0Y = []
+
+for i in range(cantidad):
+    diccFD =  dict(json.loads(str(json.dumps(abc[1][i]))))
+    listaX = [diccFD['x'].split(',')]
+    listaY = [diccFD["y"].split(',')]
+    print(str(listaX).replace('u','') + '  ->  ' + str(listaY).replace('u',''))
+    cantImplicado = listaY[0].__len__()
+    if cantImplicado > 1:
+        for j in range(cantImplicado):
+            listaL0X.append(listaX[0])
+            listaL0Y.append(listaY[0][j])
+    else:
+        listaL0X.append(listaX[0])
+        listaL0Y.append(listaY[0][0])
+
+
 #Busca la cadena 2 en la 1
 def buscar_cadena(cadena1, cadena2, debug):
     if debug == 1:
@@ -37,6 +72,8 @@ def cierre(cadenaI, listaL0X, listaL0Y, debug):
                     cadena2 = str(cadena_aux)
                 if buscar_cadena(str(cadena1), str(cadena2), debug) != False:
                     if str(cadenaF).find(str(listaL0Y[i])) == -1:
+                       if debug == 1:
+                           print("i" + str(i))
                        cadenaF = str(cadenaF) + str(listaL0Y[i])
                 if debug == 1:
                     print("cadena final" + "=>" + cadenaF)
@@ -96,6 +133,7 @@ def armar_cierre(list_a_cerrar, implicado, listaL0X, listaL0Y, debug):
         if buscar_cadena(cadena1, cadena2, debug) != False:
             dic[str(str(cadena))] = True
             hay_extrano = True
+            break
         else:
             dic[str(str(cadena))] = False
         if debug == 1:
@@ -120,7 +158,9 @@ def armar_cierre(list_a_cerrar, implicado, listaL0X, listaL0Y, debug):
                     print("Lista a cerrar Despues: " + str(list_a_cerrar.__len__()))
                 #recursion
                 if list_a_cerrar.__len__() > 1:
-                    armar_cierre(list_a_cerrar, listaL0X, listaL0Y, implicado, debug)
+                    if debug == 1:
+                        print("Llamado recursivo")
+                    armar_cierre(list_a_cerrar, implicado, listaL0X, listaL0Y, debug)
            else:
                 pass
     return list_a_cerrar
@@ -153,8 +193,9 @@ def atributos_extranos(listaL0X, listaL0Y, debug):
                 listaL1Y.append(listaL0Y[i])
         else:
             if debug == 1:
-                print("Lista a cerrar: " + str(listCierre))
-            list_resultado = armar_cierre(listCierre, listaL0Y[i], listaL0X, listaL0Y, 0)
+                print("Lista a cerrar: " + str(listCierre) + str(i))
+                print("Lista a cerrar: " + str(listaL0Y))
+            list_resultado = armar_cierre(listCierre, listaL0Y[i], listaL0X, listaL0Y, 1)
             if debug == 1:
                 print("Paso " + str(i) + " Resultado " + str(list_resultado))
             valida_lista_x = buscarLista(listaL1X,list_resultado)
@@ -166,7 +207,14 @@ def atributos_extranos(listaL0X, listaL0Y, debug):
         i=i+1
     return listaL1X, listaL1Y
 
-'''lista_sin_AEX, lista_sin_AEY = atributos_extranos(listaL0X, listaL0Y, 0)
+lista_sin_AEX, lista_sin_AEY = atributos_extranos(listaL0X, listaL0Y, 1)
 
 for z in range(lista_sin_AEX.__len__()):
-    print("Resultado " + str(lista_sin_AEX[z]) + "=>" + str(lista_sin_AEY[z]) )'''
+    print("Resultado " + str(lista_sin_AEX[z]) + "=>" + str(lista_sin_AEY[z]) )
+
+
+
+
+
+
+
