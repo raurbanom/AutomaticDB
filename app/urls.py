@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^about/$', views.about, name='about'),
     url(r'^upload/$', views.upload, name='upload'),
-    url(r'^manual/$', views.manual, name='manual')
+    url(r'^manual/$', views.manual, name='manual'),
+    # url(r'^result/$', views.result, name='result')
 ]

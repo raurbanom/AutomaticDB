@@ -16,6 +16,7 @@ listaL0X, listaL0Y = recubrimiento.get_descomposicion()
 print("*********Algoritmo L0 Descomposicion*********")
 
 print (recubrimiento.print_descomposicion())
+print (recubrimiento.get_operaciones_L0())
 
 print("*********Algoritmo L1 Atributos Extranios*********")
 

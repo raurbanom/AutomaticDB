@@ -15,17 +15,30 @@
         {% comment %}<label>Cargar Relaci&oacute;n</label>{% endcomment %}
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type="file" id="jsonFile" name="jsonFile" />
+            <input type="file" id="fileJson" name="fileJson" />
+            {% if uploaded_file_url %}
+                <input type="hidden" id="fileUrl" name="fileUrl" value="{{ uploaded_file_url }}" />
+            {% endif %}
             <br />
-            {% comment %}{{ form.as_p }}{% endcomment %}
-            <button class="btn btn-info" type="submit">Cargar</button>
+            <button class="btn btn-success" type="submit" name="btnUpload">Procesar</button>
         </form>
         <br />
         {% if uploaded_file_url %}
             <div class="alert alert-info" role="alert">
                 Archivo cargado en: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a>
             </div>
-            <pre> {{ uploaded_file_data }} </pre>
+            <div class="row">
+                <div class="col-sm-12">
+                  <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Resultado</h3>
+                    </div>
+                    <div class="panel-body">
+                      <pre> {{ uploaded_file_data }} </pre>
+                    </div>
+                  </div>
+            </div><!-- /.col-sm-12 -->
+
         {% endif %}
         {% if uploaded_file_message %}
             <div class="alert alert-danger" role="alert">
@@ -40,7 +53,7 @@
     <script src="{% static 'bootstrap/js/bootstrap-filestyle.min.js' %}"></script>
 
     <script type="application/javascript">
-        $('#jsonFile').filestyle({
+        $('#fileJson').filestyle({
             buttonName : 'btn-info',
             buttonText : ' Seleccionar archivo JSON'
         });

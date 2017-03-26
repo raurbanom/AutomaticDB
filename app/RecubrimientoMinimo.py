@@ -45,17 +45,15 @@ class RecubrimientoMinimo(object):
         return self.listaL0X, self.listaL0Y
 
     def get_operaciones_L0(self):
-        result1 = ""
         result2 = ""
         result3 = ""
         cant = self.result_operacionesXL0.__len__()
         for i in range(cant):
             cantImplicado = self.result_operacionesYL0[0].__len__()
-            result1 = ""
             result1 = str(self.result_operacionesXL0[i]) + " --> " + str(self.result_operacionesYL0[i]).replace('u', '').replace('[', '').replace(']', '').replace("'", '').replace(',', '').replace(' ', '')
             for j in range(cantImplicado):
-                result2 = result2 + (str(self.result_operacionesXL0[i]) + ' --> ' + str(self.result_operacionesYL0[i][j])) + '\n'
-            result3 = result3 + ("Descomponer => " + result1 + "\n" + result2 + "\n")
+                result2 = result2 + (str(self.result_operacionesXL0[i]) + '\t --> ' + str(self.result_operacionesYL0[i][j])) + '\n'
+            result3 += "Descomponer: " + result1 + "\n" + result2 + "\n"
             result2 = ""
         return result3
 
@@ -247,25 +245,22 @@ class RecubrimientoMinimo(object):
         return text
 
     # Metodos Auxiliares
-
     def print_descomposicion(self):
-
-        resultDescomposicion = ""
+        result = ""
         length = self.listaL0X.__len__()
 
         for index in range(length):
-            resultDescomposicion = resultDescomposicion + \
-                                   str(self.listaL0X[index]).replace('u', '').replace('[', '').replace(']', '').replace("'", '').replace(',', '').replace(' ', '') + ' --> ' + \
-                                   str(self.listaL0Y[index]) + "\n"
-        return resultDescomposicion
+            result += str(self.listaL0X[index]).replace('u', '').replace('[', '').replace(']', '').replace("'", '').replace(',', '').replace(' ', '') + '\t --> ' +\
+                      str(self.listaL0Y[index]) + "\n"
+
+        return result + '\n'
 
     def print_extranios(self):
-        resultExtranios = ""
+        result = ""
         length = self.listaL1X.__len__()
 
         for z in range(length):
-            resultExtranios = resultExtranios + \
-                                   str(self.listaL1X[z]).replace('u', '').replace('[', '').replace(']', '').replace("'", "").replace(',', '').replace(' ', '') + " --> " + \
+            result += str(self.listaL1X[z]).replace('u', '').replace('[', '').replace(']', '').replace("'", "").replace(',', '').replace(' ', '') + "\t --> " + \
                                    str(self.listaL1Y[z]).replace('u', '') + "\n"
 
-        return resultExtranios
+        return result

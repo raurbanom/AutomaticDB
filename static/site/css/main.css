@@ -2,3 +2,7 @@ img.img-circle.centered {
     width: 120px;
     height: 120px;
 }
+
+.panel-body pre {
+    max-height: 400px;
+}
