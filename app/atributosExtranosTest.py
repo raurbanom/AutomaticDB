@@ -141,6 +141,7 @@ def armar_cierre(list_a_cerrar, implicado, debug):
         if buscar_cadena(cadena1, cadena2, debug) != False:
             dic[str(str(cadena))] = True
             hay_extrano = True
+            break
         else:
             dic[str(str(cadena))] = False
         if debug == 1:
