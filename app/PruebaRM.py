@@ -28,6 +28,7 @@ print(" ------------------------------------------------------------------------
 print(" Algoritmo L2 Dependencias Redundantes")
 print(" ------------------------------------------------------------------------")
 
-lista_Rta_X, lista_Rta_Y = recubrimiento.dependencias_redundantes(0)
+lista_Rta_X, lista_Rta_Y = recubrimiento.dependencias_redundantes()
 print (recubrimiento.print_resultado())
+print (recubrimiento.get_operaciones_L2())
 

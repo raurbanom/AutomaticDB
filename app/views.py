@@ -4,7 +4,9 @@ import os
 
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
+
 from RecubrimientoMinimo import RecubrimientoMinimo
 
 error_messages = {
@@ -38,6 +40,10 @@ def upload(request):
 
 
 def manual(request):
+    if request.POST:
+        if 'btnProcess' in request.POST:
+            return redirect(reverse('home'))
+
     return render(request, 'manual.html')
 
 
@@ -90,8 +96,9 @@ def upload_json(request):
 
                 recubrimiento.dependencias_redundantes()
                 data += "\n3. Dependencias Funcionales Redundantes\n"
-                data += recubrimiento.print_resultado()
+                data += recubrimiento.get_operaciones_L2()
                 data += "3.1 Resultado L2\n"
+                data += recubrimiento.print_resultado()
 
             else:
                 data = ""

@@ -64,7 +64,7 @@ class RecubrimientoMinimo(object):
             j = 0
             list_resultado = []
             if debug == 1:
-                #print(str(i) + ") (" + self.utilidad.LimpiarCadena(str(listAux)) + ')+')
+                # print(str(i) + ") (" + self.utilidad.LimpiarCadena(str(listAux)) + ')+')
                 self.result_operacionCierreL1.append(str(i + 1) + ") (" + self.utilidad.LimpiarCadena(str(listAux)) + ')+')
             listCierre = []
             for value in listAux:
@@ -73,24 +73,24 @@ class RecubrimientoMinimo(object):
             if j == 1:
                 valida_lista_x = self.buscar_lista(listaL1X, self.listaL0X[i])
                 if debug == 1:
-                    #print("   Resultado: " + self.utilidad.LimpiarCadena(str(listAux)))
+                    # print("   Resultado: " + self.utilidad.LimpiarCadena(str(listAux)))
                     self.result_operacionCierreL1.append("   Resultado: " + self.utilidad.LimpiarCadena(str(listAux)) + '\n')
-                    #print("")
+                    # print("")
                     # print("Paso " + str(i) + " Resultado X " + str(valida_lista_x).replace('u', '').replace(',', '').replace('[', '').replace(']', '').replace(' ', '').replace("'", ''))
                 if valida_lista_x == -1 or (valida_lista_x != -1 and listaL1Y[valida_lista_x] != self.listaL0Y[i]):
                     listaL1X.append(self.listaL0X[i])
                     listaL1Y.append(self.listaL0Y[i])
             else:
                 if debug == 1:
-                    #print("    Calcular: (" + self.utilidad.LimpiarCadena(str(listCierre)) + ')+')
+                    # print("    Calcular: (" + self.utilidad.LimpiarCadena(str(listCierre)) + ')+')
                     self.result_operacionCierreL1.append("   Calcular: (" + self.utilidad.LimpiarCadena(str(listCierre)) + ')+')
                 list_resultado = self.armar_cierre(listCierre, self.listaL0Y[i], 0)
                 if debug == 1:
-                    #print("    Resultado: " + self.utilidad.LimpiarCadena(str(list_resultado)))
+                    # print("    Resultado: " + self.utilidad.LimpiarCadena(str(list_resultado)))
                     self.result_operacionCierreL1.append("    Resultado: " + self.utilidad.LimpiarCadena(str(list_resultado)) + '\n')
                 valida_lista_x = self.buscar_lista(listaL1X, list_resultado)
-                #if debug == 1:
-                    #print("")
+                # if debug == 1:
+                    # print("")
                     # print("Paso " + str(i) + " Resultado X " + str(valida_lista_x))
                 if valida_lista_x == -1 or (valida_lista_x != -1 and listaL1Y[valida_lista_x] != self.listaL0Y[i]):
                     listaL1X.append(list_resultado)
@@ -103,10 +103,8 @@ class RecubrimientoMinimo(object):
         return listaL1X, listaL1Y
 
     # dependencias redundantes.
-    def dependencias_redundantes(self, debug):
+    def dependencias_redundantes(self, debug = 1):
         i = 0
-        #listaL2X = []
-        #listaL2Y = []
         listaAuxX = []
         listaAuxY = []
         listAux = []
@@ -115,29 +113,29 @@ class RecubrimientoMinimo(object):
             for value in listAux:
                 listCierre.append(value)
             if debug == 1:
-                #print(str(i) + ") Calcular (" + self.utilidad.LimpiarCadena(str(listCierre)) + ')+')
+                # print(str(i) + ") Calcular (" + self.utilidad.LimpiarCadena(str(listCierre)) + ')+')
                 self.result_operacionCierreL2.append(str(i) + ") Calcular (" + self.utilidad.LimpiarCadena(str(listCierre)) + ')+')
             for z in range(self.listaL1X.__len__()):
                 listaAuxX.insert(z, self.listaL1X[z])
                 listaAuxY.insert(z, self.listaL1Y[z])
             listaAuxX.pop(i)
             listaAuxY.pop(i)
-            #if debug == 1:
-                #print("Paso lista_sin_AEX " + str(i) + " " + self.utilidad.LimpiarCadena(str(self.listaL1X)))
-                #print("Paso lista_sin_AEY " + str(i) + " " + self.utilidad.LImpiarCadena(str(self.listaL1Y)))
-                #print("Paso lista_sin_AEY[i] " + str(i) + " " + self.utilidad.LImpiarCadena(str(self.listaL1Y[i])))
-                #print("Paso listaAuxX " + str(i) + " " + self.utilidad.LImpiarCadena(str(listaAuxX)))
-                #print("-------Paso listaAuxY " + str(i) + " " + self.utilidad.LImpiarCadena(str(listaAuxY)))
+            # if debug == 1:
+                # print("Paso lista_sin_AEX " + str(i) + " " + self.utilidad.LimpiarCadena(str(self.listaL1X)))
+                # print("Paso lista_sin_AEY " + str(i) + " " + self.utilidad.LImpiarCadena(str(self.listaL1Y)))
+                # print("Paso lista_sin_AEY[i] " + str(i) + " " + self.utilidad.LImpiarCadena(str(self.listaL1Y[i])))
+                # print("Paso listaAuxX " + str(i) + " " + self.utilidad.LImpiarCadena(str(listaAuxX)))
+                # print("-------Paso listaAuxY " + str(i) + " " + self.utilidad.LImpiarCadena(str(listaAuxY)))
             hay_redundancia = self.armar_cierre_redundantes(listCierre, self.listaL1Y[i], listaAuxX, listaAuxY, debug)
             if debug == 1:
-                #print("   Redundancia en: " + self.utilidad.LimpiarCadena(str(listCierre)) + " = " + str(hay_redundancia) + '\n')
+                # print("   Redundancia en: " + self.utilidad.LimpiarCadena(str(listCierre)) + " = " + str(hay_redundancia) + '\n')
                 self.result_operacionCierreL2.append("   Redundancia en: " + self.utilidad.LimpiarCadena(str(listCierre)) + " = " + str(hay_redundancia) + '\n')
-            if hay_redundancia != True:
+            if not hay_redundancia:
                 self.listaL2X.insert(i, self.listaL1X[i])
                 self.listaL2Y.insert(i, self.listaL1Y[i])
             else:
-                #if debug == 1:
-                    #print("   Eliminacion en: " + str(i) + " " + self.utilidad.LimpiarCadena(str(self.listaL1X[i])) + " --> " + self.utilidad.LimpiarCadena(str(self.listaL1Y[i])) + '\n')
+                # if debug == 1:
+                    # print("   Eliminacion en: " + str(i) + " " + self.utilidad.LimpiarCadena(str(self.listaL1X[i])) + " --> " + self.utilidad.LimpiarCadena(str(self.listaL1Y[i])) + '\n')
                 self.result_operacionCierreL2.append("   Eliminacion en: " + str(i) + " " + self.utilidad.LimpiarCadena(str(self.listaL1X[i])) + " --> " + self.utilidad.LimpiarCadena(str(self.listaL1Y[i])) + '\n')
                 self.listaL1X[i] = []
                 self.listaL1Y[i] = []
@@ -214,9 +212,9 @@ class RecubrimientoMinimo(object):
                 cadena_aux = str("")
                 for value in listAux:
                     cadena_aux = cadena_aux + str(value)
-                #if debug == 1:
-                    #print("Cadena aux" + " --> " + cadena_aux)
-                    #print("Cadena final" + " --> " + cadenaF)
+                # if debug == 1:
+                    # print("Cadena aux" + " --> " + cadena_aux)
+                    # print("Cadena final" + " --> " + cadenaF)
                 if str(cadenaF).__len__() > 1:
                     if (str(cadenaF).__len__() == str(cadena_aux).__len__()) or (
                         str(cadena_aux).__len__() < str(cadenaF).__len__()):
@@ -442,7 +440,7 @@ class RecubrimientoMinimo(object):
             result = result + str(self.result_operacionCierreL1[i]) + "\n"
         return result
 
-    def get_operacines_L2(self):
+    def get_operaciones_L2(self):
         cant = self.result_operacionCierreL2.__len__()
         result = ""
         for i in range(cant):
