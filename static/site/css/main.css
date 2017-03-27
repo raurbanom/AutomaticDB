@@ -10,3 +10,12 @@ img.img-circle.centered {
 button.float-right {
     float: right;
 }
+
+button#btnAddDependencies {
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.row.modal-response {
+    display: none;
+}

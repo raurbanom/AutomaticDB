@@ -5,8 +5,15 @@
 
 $(function () {
     var $helpers = $("#btnHelperAttributes, #btnHelperDependencies");
+
     var $attributes = $("#txtAttributes");
     var $dependencies = $("#txtDependencies");
+
+    var $addDependenciesX = $("#txtAddImplicante");
+    var $addDependenciesY = $("#txtAddImplicado");
+
+    var $validator = $("#form").validator();
+    var $validatorModal = $("#form-modal").validator();
 
     $helpers.popover({
         /* trigger : 'hover',
@@ -33,12 +40,52 @@ $(function () {
         }
     });
 
-    $("#form").validator().on('submit', function (e) {
+    $validator.on('submit', function (e) {
         if (e.isDefaultPrevented()) {
             console.log("Handle the invalid form");
+            var text = $dependencies.val() ? $dependencies.val().trim(): "";
+            if(engineering.util.isEmpty(text)){
+                // console.log("El Campo es requerido.")
+            }
         } else {
-            console.log("Everything looks good!");
-            // $(this).submit();
+            //console.log("Everything looks good!");
+        }
+    });
+
+    $validatorModal.on('submit', function (e) {
+        if (e.isDefaultPrevented()) {
+            // console.log("Handle the invalid form");
+        } else {
+            // console.log("Everything looks good!");
+            try{
+                e.preventDefault();
+
+                var tempDependencies = $dependencies.val();
+                var result = $addDependenciesX.val() + ":" + $addDependenciesY.val();
+
+                if(!engineering.util.isEmpty(tempDependencies)){
+                    result = tempDependencies + "; " + result;
+                }
+
+                $dependencies.val(result);
+
+                $(".modal-response").show();
+
+                $("#txtResultDependenceX").text($addDependenciesX.val().replace(" ", "").replace(",", " "));
+                $("#txtResultDependenceY").text($addDependenciesY.val().replace(" ", "").replace(",", " "));
+
+                $(this)[0].reset();
+                $addDependenciesX.val("");
+                $addDependenciesY.val("");
+
+                 setTimeout(function() {
+                     $(".modal-response").hide();
+                     $("#txtResultDependenceX").text("");
+                     $("#txtResultDependenceY").text("");
+                }, 1500);
+            } catch (e){
+                // console.log("Error");
+            }
         }
     })
 });
