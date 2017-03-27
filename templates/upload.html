@@ -12,41 +12,42 @@
     <h2>Recubrimiento M&iacute;nimo:</h2>
 
     <div class="form-group">
-    {% comment %}<label>Cargar Relaci&oacute;n</label>{% endcomment %}
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" id="fileJson" name="fileJson" />
-        {% if uploaded_file_url %}
-            <input type="hidden" id="fileUrl" name="fileUrl" value="{{ uploaded_file_url }}" />
-        {% endif %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" id="fileJson" name="fileJson" />
+            {% if uploaded_file_url %}
+                <input type="hidden" id="fileUrl" name="fileUrl" value="{{ uploaded_file_url }}" />
+            {% endif %}
+            <br />
+            <button class="btn btn-success" type="submit" name="btnUpload">Procesar</button>
+        </form>
         <br />
-        <button class="btn btn-success" type="submit" name="btnUpload">Procesar</button>
-    </form>
-    <br />
-    {% if uploaded_file_url %}
-        <div class="alert alert-info" role="alert">
-            Archivo cargado en: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a>
-        </div>
-        <div class="row">
-        <div class="col-sm-12">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Resultado</h3>
-                </div>
-                <div class="panel-body">
-                    <pre> {{ uploaded_file_data }} </pre>
-                </div>
+        {% if uploaded_file_url %}
+            <div class="alert alert-info" role="alert">
+                Archivo cargado en: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a>
             </div>
-        </div><!-- /.col-sm-12 -->
+            {% if uploaded_file_data %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Resultado</h3>
+                            </div>
+                            <div class="panel-body">
+                                <pre> {{ uploaded_file_data }} </pre>
+                            </div>
+                        </div>
+                    </div><!-- /.col-sm-12 -->
+                </div>
+            {% endif %}
+        {% endif %}
+        {% if uploaded_file_message %}
+            <div class="alert alert-danger" role="alert">
+                {{ uploaded_file_message }}
+            </div>
+        {% endif %}
 
-    {% endif %}
-{% if uploaded_file_message %}
-    <div class="alert alert-danger" role="alert">
-        {{ uploaded_file_message }}
     </div>
-{% endif %}
-
-</div>
 {% endblock container %}
 
 {% block scripts %}
