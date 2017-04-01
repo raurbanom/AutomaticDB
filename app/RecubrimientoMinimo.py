@@ -1,3 +1,4 @@
+# coding=utf-8
 import json
 from Utilidades import Utilidades
 
@@ -25,6 +26,34 @@ class RecubrimientoMinimo(object):
         self.result_operacionCierreL1 = []
         self.result_operacionCierreL2 = []
         self.utilidad = Utilidades()
+
+
+    # ------------------------------------------------------------------------
+    # FUNCION EJECUTAR
+    # ------------------------------------------------------------------------
+
+    def get_resultado(self):
+
+        self.get_descomposicion()
+        data = "1. Dependencias Elementales\n"
+        data += self.get_operaciones_L0()
+        data += "1.1 Resultado L0 \n"
+        data += self.print_descomposicion()
+
+        self.atributos_extranos()
+        data += "\n2. Atributos Extraños\n"
+        data += self.get_operaciones_L1()
+        data += "2.1 Resultado L1\n"
+        data += self.print_extranios()
+
+        self.dependencias_redundantes()
+        data += "\n3. Dependencias Funcionales Redundantes\n"
+        data += self.get_operaciones_L2()
+        data += "3.1 Resultado L2\n"
+        result = self.print_resultado()
+        data += result
+
+        return result, data
 
     # ------------------------------------------------------------------------
     # FUNCIONES PRINCIPALES
@@ -90,8 +119,8 @@ class RecubrimientoMinimo(object):
                     self.result_operacionCierreL1.append("    Resultado: " + self.utilidad.LimpiarCadena(str(list_resultado)) + '\n')
                 valida_lista_x = self.buscar_lista(listaL1X, list_resultado)
                 # if debug == 1:
-                    # print("")
-                    # print("Paso " + str(i) + " Resultado X " + str(valida_lista_x))
+                # print("")
+                # print("Paso " + str(i) + " Resultado X " + str(valida_lista_x))
                 if valida_lista_x == -1 or (valida_lista_x != -1 and listaL1Y[valida_lista_x] != self.listaL0Y[i]):
                     listaL1X.append(list_resultado)
                     listaL1Y.append(self.listaL0Y[i])
@@ -121,11 +150,11 @@ class RecubrimientoMinimo(object):
             listaAuxX.pop(i)
             listaAuxY.pop(i)
             # if debug == 1:
-                # print("Paso lista_sin_AEX " + str(i) + " " + self.utilidad.LimpiarCadena(str(self.listaL1X)))
-                # print("Paso lista_sin_AEY " + str(i) + " " + self.utilidad.LImpiarCadena(str(self.listaL1Y)))
-                # print("Paso lista_sin_AEY[i] " + str(i) + " " + self.utilidad.LImpiarCadena(str(self.listaL1Y[i])))
-                # print("Paso listaAuxX " + str(i) + " " + self.utilidad.LImpiarCadena(str(listaAuxX)))
-                # print("-------Paso listaAuxY " + str(i) + " " + self.utilidad.LImpiarCadena(str(listaAuxY)))
+            # print("Paso lista_sin_AEX " + str(i) + " " + self.utilidad.LimpiarCadena(str(self.listaL1X)))
+            # print("Paso lista_sin_AEY " + str(i) + " " + self.utilidad.LImpiarCadena(str(self.listaL1Y)))
+            # print("Paso lista_sin_AEY[i] " + str(i) + " " + self.utilidad.LImpiarCadena(str(self.listaL1Y[i])))
+            # print("Paso listaAuxX " + str(i) + " " + self.utilidad.LImpiarCadena(str(listaAuxX)))
+            # print("-------Paso listaAuxY " + str(i) + " " + self.utilidad.LImpiarCadena(str(listaAuxY)))
             hay_redundancia = self.armar_cierre_redundantes(listCierre, self.listaL1Y[i], listaAuxX, listaAuxY, debug)
             if debug == 1:
                 # print("   Redundancia en: " + self.utilidad.LimpiarCadena(str(listCierre)) + " = " + str(hay_redundancia) + '\n')
@@ -135,7 +164,7 @@ class RecubrimientoMinimo(object):
                 self.listaL2Y.insert(i, self.listaL1Y[i])
             else:
                 # if debug == 1:
-                    # print("   Eliminacion en: " + str(i) + " " + self.utilidad.LimpiarCadena(str(self.listaL1X[i])) + " --> " + self.utilidad.LimpiarCadena(str(self.listaL1Y[i])) + '\n')
+                # print("   Eliminacion en: " + str(i) + " " + self.utilidad.LimpiarCadena(str(self.listaL1X[i])) + " --> " + self.utilidad.LimpiarCadena(str(self.listaL1Y[i])) + '\n')
                 self.result_operacionCierreL2.append("   Eliminacion en: " + str(i) + " " + self.utilidad.LimpiarCadena(str(self.listaL1X[i])) + " --> " + self.utilidad.LimpiarCadena(str(self.listaL1Y[i])) + '\n')
                 self.listaL1X[i] = []
                 self.listaL1Y[i] = []
@@ -165,7 +194,7 @@ class RecubrimientoMinimo(object):
                 cadena_aux = str("")
                 for value in listAux:
                     cadena_aux = cadena_aux + str(value)
-                #if debug == 1:
+                    #if debug == 1:
                     #print("Cadena aux" + " --> " + cadena_aux)
                     #print("Cadena final" + " --> " + cadenaF)
                 if str(cadenaF).__len__() > 1:
@@ -180,19 +209,19 @@ class RecubrimientoMinimo(object):
                         if self.buscar_cadena(str(cadena1), str(cadena2), debug) != False:
                             if str(cadenaF).find(str(self.listaL0Y[i])) == -1:
                                 #if debug == 1:
-                                    #print("i" + str(i))
+                                #print("i" + str(i))
                                 cadenaF = str(cadenaF) + str(self.listaL0Y[i])
                                 Suma_DF = True
-                        #if debug == 1:
-                            #print("cadena final" + "=>" + cadenaF)
+                                #if debug == 1:
+                                #print("cadena final" + "=>" + cadenaF)
                 else:
                     #if debug == 1:
-                        #print("cadena aux" + "=>" + cadena_aux)
-                        #print("cadena final" + "=>" + cadenaF)
+                    #print("cadena aux" + "=>" + cadena_aux)
+                    #print("cadena final" + "=>" + cadenaF)
                     if cadenaF == cadena_aux:
                         cadenaF = cadenaF + str(self.listaL0Y[i])
                         Suma_DF = True
-                    #if debug == 1:
+                        #if debug == 1:
                         #print("cadena final" + "=>" + cadenaF)
                 i = i + 1
         return cadenaF
@@ -212,12 +241,12 @@ class RecubrimientoMinimo(object):
                 cadena_aux = str("")
                 for value in listAux:
                     cadena_aux = cadena_aux + str(value)
-                # if debug == 1:
+                    # if debug == 1:
                     # print("Cadena aux" + " --> " + cadena_aux)
                     # print("Cadena final" + " --> " + cadenaF)
                 if str(cadenaF).__len__() > 1:
                     if (str(cadenaF).__len__() == str(cadena_aux).__len__()) or (
-                        str(cadena_aux).__len__() < str(cadenaF).__len__()):
+                                str(cadena_aux).__len__() < str(cadenaF).__len__()):
                         if str(cadena_aux).__len__() > str(cadenaF).__len__():
                             cadena1 = str(cadena_aux)
                             cadena2 = str(cadenaF)
@@ -227,19 +256,19 @@ class RecubrimientoMinimo(object):
                         if self.buscar_cadena(str(cadena1), str(cadena2), debug) != False:
                             if str(cadenaF).find(str(listaY[i])) == -1:
                                 #if debug == 1:
-                                    #print("i" + str(i))
+                                #print("i" + str(i))
                                 cadenaF = str(cadenaF) + str(listaY[i])
                                 Suma_DF = True
-                        #if debug == 1:
-                            #print("cadena final" + " --> " + cadenaF)
+                                #if debug == 1:
+                                #print("cadena final" + " --> " + cadenaF)
                 else:
                     #if debug == 1:
-                        #print("Cadena aux" + " --> " + cadena_aux)
-                        #print("Cadena final" + " --> " + cadenaF)
+                    #print("Cadena aux" + " --> " + cadena_aux)
+                    #print("Cadena final" + " --> " + cadenaF)
                     if cadenaF == cadena_aux:
                         cadenaF = cadenaF + str(listaY[i])
                         Suma_DF = True
-                    #if debug == 1:
+                        #if debug == 1:
                         #print("Cadena final" + " --> " + cadenaF)
                 i = i + 1
         return cadenaF
@@ -262,19 +291,19 @@ class RecubrimientoMinimo(object):
             cadena = ''
             for caracter in list_a_cerrar:
                 #if debug == 1:
-                    #print("Caracter" + caracter)
+                #print("Caracter" + caracter)
                 if j != i:
                     cadena = cadena + caracter
                 else:
                     caracterExtrano = caracter
                 j += 1
                 #if debug == 1:
-                    #print("Cadena armada" + cadena)
+                #print("Cadena armada" + cadena)
             lista.append(cadena)
             dic[str(cadena)] = False
             dicExrano[str(cadena)] = caracterExtrano
             i += 1
-        #if debug == 1:
+            #if debug == 1:
             #print("Cadena armada" + str(lista))
             #print("diccionario armada" + str(dic))
             #print("diccionario extrano" + str(dicExrano))
@@ -333,11 +362,11 @@ class RecubrimientoMinimo(object):
         cadena = ''
         for caracter in list_a_cerrar:
             #if debug == 1:
-                #print("")
-                #print("Caracter " + caracter)
+            #print("")
+            #print("Caracter " + caracter)
             cadena = cadena + caracter
             i = i + 1
-        #if debug == 1:
+            #if debug == 1:
             #print("")
             #print("Cadena armada " + cadena)
         cadena_cierre = self.cierre_redundante(str(cadena), listaX, listaY, debug)
@@ -373,8 +402,8 @@ class RecubrimientoMinimo(object):
     @staticmethod
     def buscar_cadena(cadena1, cadena2, debug):
         #if debug == 1:
-            #print("Cadena 1" + "=>" + cadena1)
-            #print("Cadena 2" + "=>" + cadena2)
+        #print("Cadena 1" + "=>" + cadena1)
+        #print("Cadena 2" + "=>" + cadena2)
         flag = True
         for caracter_cadena2 in cadena2:
             if cadena1.find(caracter_cadena2) != -1:

@@ -63,16 +63,17 @@ def create_json(attributes, dependencies):
         # format data
         json_data = json.dumps(data, indent=4)
 
-        filename = get_name_json()
-        path = os.path.join(settings.MEDIA_ROOT, filename)
+        filename = get_file_name(".json")
+        result = create_file(filename, json_data)
 
-        file_io = open(path, 'w+')
-        file_io.write(json_data)
-        file_io.close()
-
-        return {
-            "uploaded_file_url": filename
-        }
+        if result:
+            return {
+                "uploaded_file_url": filename
+            }
+        else:
+            return {
+                "uploaded_file_message": error_messages["file_process"]
+            }
     except:
         return {
             "uploaded_file_message": error_messages["file_process"]
@@ -97,12 +98,15 @@ def manual(request):
             # Check file
             if is_json(filename):
                 path = os.path.join(settings.MEDIA_ROOT, filename)
-                data = get_minimal_closure(path)
+                data, log = get_minimal_closure(path)
+                upload_file_data = MEDIA_URL + log
             else:
                 data = ""
+                upload_file_data = ""
 
             result = {
                 "uploaded_file_url": uploaded_file_url,
+                "uploaded_file_log": upload_file_data,
                 "uploaded_file_data": data
             }
 
@@ -139,13 +143,16 @@ def upload_json(request):
             # Check file
             if is_json(filename):
                 path = os.path.join(settings.MEDIA_ROOT, filename)
-                data = get_minimal_closure(path)
+                data, log = get_minimal_closure(path)
+                upload_file_data = MEDIA_URL + log
             else:
                 data = ""
+                upload_file_data = ""
 
             if len(data) > 0:
                 return {
                     "uploaded_file_url": uploaded_file_url,
+                    "uploaded_file_log": upload_file_data,
                     "uploaded_file_data": data
                 }
             else:
@@ -208,36 +215,40 @@ def is_json(filename):
     return True
 
 
-def get_name_json():
+
+def get_file_name(extension):
     now = datetime.utcnow()
     epoch = datetime(1970, 1, 1)
     td = now - epoch
 
-    return 'file_' + str(int(round(td.total_seconds()))) + str('.json')
+    return 'file_' + str(int(round(td.total_seconds()))) + str(extension)
+
+
+def create_file(filename, data):
+    try:
+
+        path = os.path.join(settings.MEDIA_ROOT, filename)
+
+        # Create file
+        file_io = open(path, 'w+')
+        file_io.write(data)
+        file_io.close()
+        return True
+    except:
+        return False
 
 
 def get_minimal_closure(path):
     try:
         recubrimiento = RecubrimientoMinimo(path)
+        list_final, txt_data = recubrimiento.get_resultado()
 
-        recubrimiento.get_descomposicion()
-        data = "1. Dependencias Elementales\n"
-        data += recubrimiento.get_operaciones_L0()
-        data += "1.1 Resultado L0 \n"
-        data += recubrimiento.print_descomposicion()
+        filename = get_file_name(".txt")
+        result = create_file(filename, txt_data)
 
-        recubrimiento.atributos_extranos()
-        data += "\n2. Atributos Extraños\n"
-        data += recubrimiento.get_operaciones_L1()
-        data += "2.1 Resultado L1\n"
-        data += recubrimiento.print_extranios()
-
-        recubrimiento.dependencias_redundantes()
-        data += "\n3. Dependencias Funcionales Redundantes\n"
-        data += recubrimiento.get_operaciones_L2()
-        data += "3.1 Resultado L2\n"
-        data += recubrimiento.print_resultado()
-
-        return data
+        if result:
+            return list_final, filename
+        else:
+            return "", ""
     except:
-        return ""
+        return "", ""

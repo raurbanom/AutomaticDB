@@ -93,7 +93,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <div class="well">
-                                        <span>Ingresar cada implicado (X) e implicante (Y) separado por signo coma (','). <br />Por ejemplo: X: <strong>B, D</strong> y Y: <strong>A, C, D</strong><span>
+                                        <p>Ingresar cada implicado (X) e implicante (Y) separado por signo coma (','). <br />Por ejemplo: X: <strong>B, D</strong> y Y: <strong>A, C, D</strong><p>
                                     </div>
                                 </div>
                             </div>
@@ -151,9 +151,6 @@
 
     <br />
     {% if uploaded_file_url %}
-        <div class="alert alert-info" role="alert">
-            Descargar archivo JSON: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a>
-        </div>
         {% if uploaded_file_data %}
             <div class="row">
                 <div class="col-sm-12">
@@ -161,9 +158,15 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">Resultado</h3>
                         </div>
-                        <div class="panel-body">
-                            <pre> {{ uploaded_file_data }} </pre>
-                        </div>
+                            <div class="panel-body">
+                                <a href="{{ uploaded_file_url }}" class="list-group-item">
+                                    <span class="glyphicon glyphicon-download"> Archivo procesado (JSON)</span>
+                                </a>
+                                <a href="{{ uploaded_file_log }}" download="{{ uploaded_file_log }}" class="list-group-item">
+                                    <span class="glyphicon glyphicon-download"> Archivo de resultado (Log)</span>
+                                </a>
+                                <pre> {{ uploaded_file_data }} </pre>
+                            </div>
                     </div>
                 </div><!-- /.col-sm-12 -->
             </div>
