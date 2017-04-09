@@ -25,6 +25,7 @@ class RecubrimientoMinimo(object):
         self.result_operacionesYL0 = []
         self.result_operacionCierreL1 = []
         self.result_operacionCierreL2 = []
+        self.listaResultResta = []
         self.utilidad = Utilidades()
 
 
@@ -160,8 +161,8 @@ class RecubrimientoMinimo(object):
                 # print("   Redundancia en: " + self.utilidad.LimpiarCadena(str(listCierre)) + " = " + str(hay_redundancia) + '\n')
                 self.result_operacionCierreL2.append("   Redundancia en: " + self.utilidad.LimpiarCadena(str(listCierre)) + " = " + str(hay_redundancia) + '\n')
             if not hay_redundancia:
-                self.listaL2X.insert(i, self.listaL1X[i])
-                self.listaL2Y.insert(i, self.listaL1Y[i])
+                self.listaL2X.insert(i, self.listaL1X[i][0])
+                self.listaL2Y.insert(i, self.listaL1Y[i][0])
             else:
                 # if debug == 1:
                 # print("   Eliminacion en: " + str(i) + " " + self.utilidad.LimpiarCadena(str(self.listaL1X[i])) + " --> " + self.utilidad.LimpiarCadena(str(self.listaL1Y[i])) + '\n')
@@ -447,6 +448,28 @@ class RecubrimientoMinimo(object):
 
         return result
 
+    def get_retsaElementos(self, lista):
+        dictionary_data = self.diccionario.values()
+        diccionario = dictionary_data[0]
+        self.listaResultResta = []
+        lista.sort()
+
+        for item in diccionario:
+            if item not in str(lista).replace('[','').replace(']', ''):
+                self.listaResultResta.append(item)
+
+        return self.utilidad.LimpiarCadena(str(self.listaResultResta))
+
+    def c(self, lista):
+        dictionary_data = self.diccionario.values()
+        diccionario = dictionary_data[0]
+
+        lista = list(set(lista))
+        lista.sort()
+        result = "{ " + str(diccionario).replace('u', '').replace('[', '').replace(']', '').replace("'", '') + " } - { " + \
+                 str(lista).replace('[', '').replace(']', '').replace("'", '').replace('u', '') + " }"
+
+        return result
     def get_operaciones_L0(self):
         result2 = ""
         result3 = ""
