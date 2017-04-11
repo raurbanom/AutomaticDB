@@ -460,7 +460,7 @@ class RecubrimientoMinimo(object):
 
         return self.utilidad.LimpiarCadena(str(self.listaResultResta))
 
-    def c(self, lista):
+    def get_OperacionRetsaElementos(self, lista):
         dictionary_data = self.diccionario.values()
         diccionario = dictionary_data[0]
 
