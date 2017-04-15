@@ -142,9 +142,9 @@ class RecubrimientoMinimo(object):
             hay_redundancia = self.armar_cierre_redundantes(listCierre, self.listaL1Y[i], listaAuxX, listaAuxY, debug)
             if debug == 1:
                 self.result_operacionCierreL2.append("   Redundancia en: " + self.utilidad.LimpiarCadena(str(listCierre)) + " = " + str(hay_redundancia) + '\n')
-            if not hay_redundancia:
-                self.listaL2X.insert(i, self.listaL1X[i][0])
-                self.listaL2Y.insert(i, self.listaL1Y[i][0])
+            if hay_redundancia != True:
+                self.listaL2X.insert(i, self.listaL1X[i])
+                self.listaL2Y.insert(i, self.listaL1Y[i])
             else:
                 self.result_operacionCierreL2.append("   Eliminacion en: " + str(i) + " " + self.utilidad.LimpiarCadena(str(self.listaL1X[i])) + " --> " + self.utilidad.LimpiarCadena(str(self.listaL1Y[i])) + '\n')
                 self.listaL1X[i] = []
@@ -328,7 +328,6 @@ class RecubrimientoMinimo(object):
         file_io = open(path, 'r')
         text = file_io.read()
         file_io.close()
-
         return text
 
     # Busca la cadena 2 en la 1
