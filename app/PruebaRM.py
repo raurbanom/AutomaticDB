@@ -32,3 +32,8 @@ lista_Rta_X, lista_Rta_Y = recubrimiento.dependencias_redundantes()
 print (recubrimiento.print_resultado())
 print (recubrimiento.get_operaciones_L2())
 
+print(" ------------------------------------------------------------------------")
+print(" Algoritmo Calculo de llaves")
+print(" ------------------------------------------------------------------------")
+recubrimiento.calculo_de_llaves()
+print (recubrimiento.print_calculo_de_llaves())
