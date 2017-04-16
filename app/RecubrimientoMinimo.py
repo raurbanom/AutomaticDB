@@ -1,5 +1,6 @@
 # coding=utf-8
 import json
+
 from Utilidades import Utilidades
 
 
@@ -37,7 +38,6 @@ class RecubrimientoMinimo(object):
         self.lista_claves = []
         self.utilidad = Utilidades()
 
-
     # ------------------------------------------------------------------------
     # FUNCION EJECUTAR
     # ------------------------------------------------------------------------
@@ -60,8 +60,17 @@ class RecubrimientoMinimo(object):
         data += "\n3. Dependencias Funcionales Redundantes\n"
         data += self.get_operaciones_L2()
         data += "3.1 Resultado L2\n"
-        result = self.print_resultado()
+
+        result = "Recubrimiento Minimo\n"
+        result += self.print_resultado()
+
+        self.calculo_de_llaves()
+
+        result += "\nCalculo de Llaves\n"
+        result += self.print_calculo_de_llaves()
+
         data += result
+
 
         return result, data
 
@@ -93,33 +102,37 @@ class RecubrimientoMinimo(object):
         return self.listaL0X, self.listaL0Y
 
     def atributos_extranos(self):
-        debug = 1
         i = 0
         listaL1X = []
         listaL1Y = []
 
         for listAux in self.listaL0X:
             j = 0
-            list_resultado = []
-            if debug == 1:
-                self.result_operacionCierreL1.append(str(i + 1) + ") (" + self.utilidad.LimpiarCadena(str(listAux)) + ')+')
+
+            # Debug
+            self.result_operacionCierreL1.append(str(i + 1) + ") (" + self.utilidad.LimpiarCadena(str(listAux)) + ')+')
+
             listCierre = []
             for value in listAux:
                 listCierre.append(value)
                 j = j + 1
             if j == 1:
                 valida_lista_x = self.buscar_lista(listaL1X, self.listaL0X[i])
-                if debug == 1:
-                    self.result_operacionCierreL1.append("   Resultado: " + self.utilidad.LimpiarCadena(str(listAux)) + '\n')
+                # Debug
+                self.result_operacionCierreL1.append("   Resultado: " + self.utilidad.LimpiarCadena(str(listAux)) + '\n')
+
                 if valida_lista_x == -1 or (valida_lista_x != -1 and listaL1Y[valida_lista_x] != self.listaL0Y[i]):
                     listaL1X.append(self.listaL0X[i])
                     listaL1Y.append(self.listaL0Y[i])
             else:
-                if debug == 1:
-                    self.result_operacionCierreL1.append("   Calcular: (" + self.utilidad.LimpiarCadena(str(listCierre)) + ')+')
-                list_resultado = self.armar_cierre(listCierre, self.listaL0Y[i], 0)
-                if debug == 1:
-                    self.result_operacionCierreL1.append("    Resultado: " + self.utilidad.LimpiarCadena(str(list_resultado)) + '\n')
+                # Debug
+                self.result_operacionCierreL1.append("   Calcular: (" + self.utilidad.LimpiarCadena(str(listCierre)) + ')+')
+
+                list_resultado = self.armar_cierre(listCierre, self.listaL0Y[i])
+
+                # Debug
+                self.result_operacionCierreL1.append("   Resultado: " + self.utilidad.LimpiarCadena(str(list_resultado)) + '\n')
+
                 valida_lista_x = self.buscar_lista(listaL1X, list_resultado)
                 if valida_lista_x == -1 or (valida_lista_x != -1 and listaL1Y[valida_lista_x] != self.listaL0Y[i]):
                     listaL1X.append(list_resultado)
@@ -131,36 +144,48 @@ class RecubrimientoMinimo(object):
 
         return listaL1X, listaL1Y
 
-    # dependencias redundantes.
-    def dependencias_redundantes(self, debug = 1):
+    # Dependencias redundantes.
+    def dependencias_redundantes(self):
         i = 0
         listaAuxX = []
         listaAuxY = []
-        listAux = []
+        
+		# Debug
+        self.result_operacionCierreL2.append("\n")
+
         for listAux in self.listaL1X:
             listCierre = []
             for value in listAux:
                 listCierre.append(value)
-            if debug == 1:
-                self.result_operacionCierreL2.append(str(i) + ") Calcular (" + self.utilidad.LimpiarCadena(str(listCierre)) + ')+')
+
+            # Debug
+            self.result_operacionCierreL2.append(str(i) + ") Calcular (" + self.utilidad.LimpiarCadena(str(listCierre)) + ')+')
+
             for z in range(self.listaL1X.__len__()):
                 listaAuxX.insert(z, self.listaL1X[z])
                 listaAuxY.insert(z, self.listaL1Y[z])
+
             listaAuxX.pop(i)
             listaAuxY.pop(i)
-            hay_redundancia = self.armar_cierre_redundantes(listCierre, self.listaL1Y[i], listaAuxX, listaAuxY, debug)
-            if debug == 1:
-                self.result_operacionCierreL2.append("   Redundancia en: " + self.utilidad.LimpiarCadena(str(listCierre)) + " = " + str(hay_redundancia) + '\n')
-            if hay_redundancia != True:
+            hay_redundancia = self.armar_cierre_redundantes(listCierre, self.listaL1Y[i], listaAuxX, listaAuxY)
+
+            # Debug
+            self.result_operacionCierreL2.append("   Redundancia en: " + self.utilidad.LimpiarCadena(str(listCierre)) + " = " + str(hay_redundancia) + '\n')
+
+            if not hay_redundancia:
                 self.listaL2X.insert(i, self.listaL1X[i])
                 self.listaL2Y.insert(i, self.listaL1Y[i])
             else:
+                # Debug
                 self.result_operacionCierreL2.append("   Eliminacion en: " + str(i) + " " + self.utilidad.LimpiarCadena(str(self.listaL1X[i])) + " --> " + self.utilidad.LimpiarCadena(str(self.listaL1Y[i])) + '\n')
+
                 self.listaL1X[i] = []
                 self.listaL1Y[i] = []
+
             listaAuxX = []
             listaAuxY = []
             i = i + 1
+
         return self.listaL2X, self.listaL2Y
 
     # ------------------------------------------------------------------------
@@ -168,28 +193,31 @@ class RecubrimientoMinimo(object):
     # ------------------------------------------------------------------------
 
     # Aplica el cierre
-    def cierre(self, cadenaI, debug):
+    def cierre(self, cadenaI):
         cadenaF = str(cadenaI)
-        if debug == 1:
-            self.result_operacionCierreL2.append("   Calcular: " + " (" + cadenaF + ")+")
+
+        # Debug
+        self.result_operacionCierreL2.append("   Calcular: " + " (" + cadenaF + ")+")
+
         Suma_DF = True
+
         while Suma_DF:
             Suma_DF = False
             i = 0
+
             for listAux in self.listaL0X:
                 cadena_aux = str("")
                 for value in listAux:
                     cadena_aux = cadena_aux + str(value)
                 if str(cadenaF).__len__() > 1:
-                    if (str(cadenaF).__len__() == str(cadena_aux).__len__()) or (
-                                str(cadena_aux).__len__() < str(cadenaF).__len__()):
+                    if (str(cadenaF).__len__() == str(cadena_aux).__len__()) or (str(cadena_aux).__len__() < str(cadenaF).__len__()):
                         if str(cadena_aux).__len__() > str(cadenaF).__len__():
                             cadena1 = str(cadena_aux)
                             cadena2 = str(cadenaF)
                         else:
                             cadena1 = str(cadenaF)
                             cadena2 = str(cadena_aux)
-                        if self.buscar_cadena(str(cadena1), str(cadena2), debug) != False:
+                        if self.buscar_cadena(str(cadena1), str(cadena2)):
                             if str(cadenaF).find(str(self.listaL0Y[i])) == -1:
                                 cadenaF = str(cadenaF) + str(self.listaL0Y[i])
                                 Suma_DF = True
@@ -200,12 +228,12 @@ class RecubrimientoMinimo(object):
                 i = i + 1
         return cadenaF
 
-
     # Aplica el cierre
-    def cierre_redundante(self, cadenaI, listaX, listaY, debug):
+    def cierre_redundante(self, cadenaI, listaX, listaY):
         cadenaF = str(cadenaI)
-        if debug == 1:
-            self.result_operacionCierreL2.append("   Calcular: " + " (" + cadenaF + ')+')
+        # Debug
+        self.result_operacionCierreL2.append("   Calcular: " + " (" + cadenaF + ')+')
+
         Suma_DF = True
         while Suma_DF:
             Suma_DF = False
@@ -223,7 +251,7 @@ class RecubrimientoMinimo(object):
                         else:
                             cadena1 = str(cadenaF)
                             cadena2 = str(cadena_aux)
-                        if self.buscar_cadena(str(cadena1), str(cadena2), debug) != False:
+                        if self.buscar_cadena(str(cadena1), str(cadena2)):
                             if str(cadenaF).find(str(listaY[i])) == -1:
                                 cadenaF = str(cadenaF) + str(listaY[i])
                                 Suma_DF = True
@@ -235,10 +263,11 @@ class RecubrimientoMinimo(object):
         return cadenaF
 
     # Aplica el cierre
-    def cierre_claves(self, cadenaI, debug):
+    def cierre_claves(self, cadenaI):
         cadenaF = str(cadenaI)
-        if debug == 1:
-            self.result_operacionCierreL2.append("   Calcular: " + " (" + cadenaF + ")+")
+        # Debug
+        self.result_operacionCierreL2.append("   Calcular: " + " (" + cadenaF + ")+")
+
         Suma_DF = True
         while Suma_DF:
             Suma_DF = False
@@ -256,7 +285,7 @@ class RecubrimientoMinimo(object):
                         else:
                             cadena1 = str(cadenaF)
                             cadena2 = str(cadena_aux)
-                        if self.buscar_cadena(str(cadena1), str(cadena2), debug) != False:
+                        if self.buscar_cadena(str(cadena1), str(cadena2)):
                             if str(cadenaF).find(str(self.listaL2Y[i])) == -1:
                                 cadenaF = str(cadenaF) + str(self.listaL2Y[i])
                                 Suma_DF = True
@@ -267,19 +296,20 @@ class RecubrimientoMinimo(object):
                 i = i + 1
         return cadenaF
 
-    # Arma el cierre y aplica tributos extrtanos
-    def armar_cierre(self, list_a_cerrar, implicado, debug):
+    # Arma el cierre y aplica tributos extranos
+    def armar_cierre(self, list_a_cerrar, implicado):
         global caracterExtrano
-        if debug == 1:
-            self.result_operacionCierreL2.append("    Validar: " + self.utilidad.LimpiarCadena(str(list_a_cerrar)) + ' --> ' + self.utilidad.LimpiarCadena(str(implicado)))
+
+        # Debug
+        self.result_operacionCierreL2.append("\n   Validar: " + self.utilidad.LimpiarCadena(str(list_a_cerrar)) + ' --> ' + self.utilidad.LimpiarCadena(str(implicado)))
+
         lista = []
         dic = {}
         dicExrano = {}
         i = 0
         hay_extrano = False
         for i in range(list_a_cerrar.__len__()):
-            if debug == 1:
-                print (str(i))
+
             j = 0
             cadena = ''
             for caracter in list_a_cerrar:
@@ -293,73 +323,67 @@ class RecubrimientoMinimo(object):
             dicExrano[str(cadena)] = caracterExtrano
             i += 1
         for cadena in lista:
-            cadena_cierre = self.cierre(str(cadena), debug)
-            if debug == 1:
-                self.result_operacionCierreL2.append("   Resultado cierre: " + str(cadena_cierre) + " --> " + str(implicado))
+            cadena_cierre = self.cierre(str(cadena))
+
+            # Debug
+            self.result_operacionCierreL2.append("   Resultado cierre: " + str(cadena_cierre) + " --> " + str(implicado))
+
             if str(cadena_cierre).__len__() > str(implicado).__len__():
                 cadena1 = str(cadena_cierre)
                 cadena2 = str(implicado)
             else:
                 cadena1 = str(implicado)
                 cadena2 = str(cadena_cierre)
-            if self.buscar_cadena(cadena1, cadena2, debug):
+            if self.buscar_cadena(cadena1, cadena2):
                 dic[str(str(cadena))] = True
                 hay_extrano = True
                 break
             else:
                 dic[str(str(cadena))] = False
-            if debug == 1:
-                print("cierre parcial " + str(dic))
-        if debug == 1:
-            print("cierre difinitivo " + str(dic))
+
         # validamos elementos extranos
         if hay_extrano:
             for llave, valor in dic.items():
-                if debug == 1:
-                    print ("Llave: ", llave)
-                    print ("Valor: ", valor)
+
                 '''Armamos el nuevo cierre'''
                 if valor:
                     valor_a_remover = dicExrano[str(llave)]
-                    if debug == 1:
-                        print("Valor a remover: " + str(valor_a_remover))
-                        print("Lista a cerrar Antes: " + str(list_a_cerrar))
                     list_a_cerrar.remove(str(valor_a_remover))
-                    if debug == 1:
-                        print("Lista a cerrar Despues: " + str(list_a_cerrar))
-                        print("Lista a cerrar Despues: " + str(list_a_cerrar.__len__()))
 
                     # recursion
                     if list_a_cerrar.__len__() > 1:
-                        self.armar_cierre(list_a_cerrar, implicado, debug)
+                        self.armar_cierre(list_a_cerrar, implicado)
                 else:
                     pass
         return list_a_cerrar
 
     # Arma el cierr y aplica tributos extrtanos
-    def armar_cierre_redundantes(self, list_a_cerrar, implicado, listaX, listaY, debug):
-        if debug == 1:
-            self.result_operacionCierreL2.append('   Validar: ' + self.utilidad.LimpiarCadena(str(list_a_cerrar)) + ' --> ' + str(implicado))
+    def armar_cierre_redundantes(self, list_a_cerrar, implicado, listaX, listaY):
+        # Debug
+        self.result_operacionCierreL2.append('   Validar: ' + self.utilidad.LimpiarCadena(str(list_a_cerrar)) + ' --> ' + str(implicado))
+
         i = 0
         validacion = False
         cadena = ''
         for caracter in list_a_cerrar:
             cadena = cadena + caracter
             i = i + 1
-        cadena_cierre = self.cierre_redundante(str(cadena), listaX, listaY, debug)
-        if debug == 1:
-            self.result_operacionCierreL2.append("   Resultado cierre: " +  self.utilidad.LimpiarCadena(str(cadena_cierre)) + " --> " + self.utilidad.LimpiarCadena(str(implicado)))
+        cadena_cierre = self.cierre_redundante(str(cadena), listaX, listaY)
+
+        # Debug
+        self.result_operacionCierreL2.append("   Resultado cierre: " + self.utilidad.LimpiarCadena(str(cadena_cierre)) + " --> " + self.utilidad.LimpiarCadena(str(implicado)))
+
         if str(cadena_cierre).__len__() > str(implicado).__len__():
             cadena1 = str(cadena_cierre)
             cadena2 = str(implicado)
         else:
             cadena1 = str(implicado)
             cadena2 = str(cadena_cierre)
-        if self.buscar_cadena(cadena1, cadena2, debug) != False:
+        if self.buscar_cadena(cadena1, cadena2):
             validacion = True
         return validacion
 
-    #Calculo de llaves
+    # Calculo de llaves
     def calculo_de_llaves(self):
         cierreZ = ''
         caracteresT = ''
@@ -369,29 +393,29 @@ class RecubrimientoMinimo(object):
         seguimos = True
         lista_z_cierre = []
         lista_z_u_w = []
-        #Armo Conjunto T
+        # Armo Conjunto T
         self.T = self.diccionario['attributes']
         self.T.sort()
-        #Armo Conjunto Yi
+        # Armo Conjunto Yi
         length = self.listaL2Y.__len__()
         for z in range(length):
             result = self.buscar_cadena_en_lista(str(self.listaL2Y[z]), self.Yi)
             if result == -1 or z == 0:
                 self.Yi += self.listaL2Y[z]
         self.Yi.sort()
-        #Calculamos Z
+        # Calculamos Z
         self.Z = self.restar_listas(self.T, self.Yi)
         self.Z.sort()
         # Calculamos Z y validamos
         if self.Z.__len__() > 0:
             for caracter in self.Z:
                 caracteresZ = caracteresZ + caracter
-            cierreZ = self.cierre_claves(caracteresZ, 0)
-            #obtenemos caracteres de T
+            cierreZ = self.cierre_claves(caracteresZ)
+            # obtenemos caracteres de T
             for c in self.T:
                 caracteresT = caracteresT + c
             if str(caracteresT).__len__() == str(cierreZ).__len__():
-                if self.buscar_cadena(caracteresT, cierreZ, 0) != False:
+                if self.buscar_cadena(caracteresT, cierreZ):
                     self.lista_claves.append(caracteresZ)
                     seguimos = False
                 else:
@@ -402,8 +426,8 @@ class RecubrimientoMinimo(object):
             # obtenemos caracteres de T
             for c in self.T:
                 caracteresT = caracteresT + c
-        if seguimos == True:
-            #calculamos W
+        if seguimos:
+            # calculamos W
             # Armo Conjunto Xi
             length = 0
             length = self.listaL2X.__len__()
@@ -421,7 +445,7 @@ class RecubrimientoMinimo(object):
             self.W = self.restar_listas(self.T, self.Xi)
             self.W.sort()
             # calculamos V
-            #armamos la lista del cierre de Z
+            # armamos la lista del cierre de Z
             for c in cierreZ:
                 lista_z_cierre.append(c)
             lista_z_cierre.extend([element for element in self.W if element not in lista_z_cierre])
@@ -438,7 +462,7 @@ class RecubrimientoMinimo(object):
         primera = True
         cierre_aux = ''
         indice = 0
-        #inicializamos M1
+        # inicializamos M1
         if caracteresZ.__len__() > 0:
             for char in self.V:
                 self.M1.append(str(caracteresZ) + str(char))
@@ -451,10 +475,10 @@ class RecubrimientoMinimo(object):
                 self.inserto_sig_nivel()
             indice = 0
             for cadena in self.M1:
-                if self.es_subConjunto(cadena) != True:
-                    cierre_aux = self.cierre_claves(cadena, 0)
+                if not self.es_subConjunto(cadena):
+                    cierre_aux = self.cierre_claves(cadena)
                     if str(caracteresT).__len__() == str(cierre_aux).__len__():
-                        if self.buscar_cadena(caracteresT, cierre_aux, 0) != False:
+                        if self.buscar_cadena(caracteresT, cierre_aux):
                             self.lista_claves.append(cadena)
                             self.M1[indice] = []
                 else:
@@ -471,7 +495,7 @@ class RecubrimientoMinimo(object):
             if len(subConjunto) <= cadena:
                 cadena1 = cadena
                 cadena2 = subConjunto
-                if self.buscar_cadena(cadena1, cadena2, 0) != False:
+                if self.buscar_cadena(cadena1, cadena2):
                     validacion = True
         return validacion
 
@@ -536,7 +560,7 @@ class RecubrimientoMinimo(object):
 
     # Busca la cadena 2 en la 1
     @staticmethod
-    def buscar_cadena(cadena1, cadena2, debug):
+    def buscar_cadena(cadena1, cadena2):
         flag = True
         for caracter_cadena2 in cadena2:
             if cadena1.find(caracter_cadena2) != -1:
@@ -584,7 +608,7 @@ class RecubrimientoMinimo(object):
         length = self.lista_claves.__len__()
 
         for z in range(length):
-            result += self.utilidad.LimpiarCadena(str(self.lista_claves[z])) + "\t"
+            result += self.utilidad.LimpiarCadena(str(self.lista_claves[z])) + "\n"
         return result
 
     def get_restaElementos(self, lista):
@@ -594,7 +618,7 @@ class RecubrimientoMinimo(object):
         lista.sort()
 
         for item in diccionario:
-            if item not in str(lista).replace('[','').replace(']', ''):
+            if item not in str(lista).replace('[', '').replace(']', ''):
                 self.listaResultResta.append(item)
 
         return self.utilidad.LimpiarCadena(str(self.listaResultResta))
@@ -605,10 +629,11 @@ class RecubrimientoMinimo(object):
 
         lista = list(set(lista))
         lista.sort()
-        result = "{ " + str(diccionario).replace('u', '').replace('[', '').replace(']', '').replace("'", '') + " } - { " + \
-                 str(lista).replace('[', '').replace(']', '').replace("'", '').replace('u', '') + " }"
+        result = "{ " + self.utilidad.LimpiarCadena(str(diccionario)) + " } - { " + self.utilidad.LimpiarCadena(
+            str(lista)) + " }"
 
         return result
+
     def get_operaciones_L0(self):
         result2 = ""
         result3 = ""
