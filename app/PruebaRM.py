@@ -37,3 +37,12 @@ print(" Algoritmo Calculo de llaves")
 print(" ------------------------------------------------------------------------")
 lista_Rta_Y = recubrimiento.calculo_de_llaves()
 print (recubrimiento.print_calculo_de_llaves())
+
+print(" ------------------------------------------------------------------------")
+print(" Log algoritmo caldulo de llaves")
+print(" ------------------------------------------------------------------------")
+result1, result2 = recubrimiento.get_OperacionCalculoLlaves()
+
+print(result1)
+print("")
+print(result2)

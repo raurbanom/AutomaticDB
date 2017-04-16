@@ -38,6 +38,10 @@ class RecubrimientoMinimo(object):
         self.lista_claves = []
         self.utilidad = Utilidades()
 
+        self.cierreZ = ''
+        self.listaElementosCierreZ = []
+        self.listaOpePosibleCombinacion = []
+
     # ------------------------------------------------------------------------
     # FUNCION EJECUTAR
     # ------------------------------------------------------------------------
@@ -149,7 +153,7 @@ class RecubrimientoMinimo(object):
         i = 0
         listaAuxX = []
         listaAuxY = []
-        
+
 		# Debug
         self.result_operacionCierreL2.append("\n")
 
@@ -385,7 +389,7 @@ class RecubrimientoMinimo(object):
 
     # Calculo de llaves
     def calculo_de_llaves(self):
-        cierreZ = ''
+        self.cierreZ = ''
         caracteresT = ''
         caracteresZ = ''
         cadena1 = ''
@@ -410,12 +414,13 @@ class RecubrimientoMinimo(object):
         if self.Z.__len__() > 0:
             for caracter in self.Z:
                 caracteresZ = caracteresZ + caracter
-            cierreZ = self.cierre_claves(caracteresZ)
+            self.cierreZ = self.cierre_claves(caracteresZ)
+            self.listaElementosCierreZ.append(self.cierre_claves(caracteresZ))
             # obtenemos caracteres de T
             for c in self.T:
                 caracteresT = caracteresT + c
-            if str(caracteresT).__len__() == str(cierreZ).__len__():
-                if self.buscar_cadena(caracteresT, cierreZ):
+            if str(caracteresT).__len__() == str(self.cierreZ).__len__():
+                if self.buscar_cadena(caracteresT, self.cierreZ):
                     self.lista_claves.append(caracteresZ)
                     seguimos = False
                 else:
@@ -446,7 +451,7 @@ class RecubrimientoMinimo(object):
             self.W.sort()
             # calculamos V
             # armamos la lista del cierre de Z
-            for c in cierreZ:
+            for c in self.cierreZ:
                 lista_z_cierre.append(c)
             lista_z_cierre.extend([element for element in self.W if element not in lista_z_cierre])
             lista_z_u_w = lista_z_cierre
@@ -477,6 +482,7 @@ class RecubrimientoMinimo(object):
             for cadena in self.M1:
                 if not self.es_subConjunto(cadena):
                     cierre_aux = self.cierre_claves(cadena)
+                    #self.listaOpePosibleCombinacion.append('(' + cadena + ')+ = ' + cierre_aux)
                     if str(caracteresT).__len__() == str(cierre_aux).__len__():
                         if self.buscar_cadena(caracteresT, cierre_aux):
                             self.lista_claves.append(cadena)
@@ -485,6 +491,7 @@ class RecubrimientoMinimo(object):
                     self.M1[indice] = []
                 indice = indice + 1
                 primera = False
+                self.listaOpePosibleCombinacion.append('(' + cadena + ')+ = ' + cierre_aux)
 
     def es_subConjunto(self, cadena):
         self.lista_claves.sort()
@@ -611,28 +618,44 @@ class RecubrimientoMinimo(object):
             result += self.utilidad.LimpiarCadena(str(self.lista_claves[z])) + "\n"
         return result
 
-    def get_restaElementos(self, lista):
+    def get_OperacionCalculoLlaves(self):
         dictionary_data = self.diccionario.values()
         diccionario = dictionary_data[0]
-        self.listaResultResta = []
-        lista.sort()
+        #lista = list(set(lista))
 
-        for item in diccionario:
-            if item not in str(lista).replace('[', '').replace(']', ''):
-                self.listaResultResta.append(item)
+        self.listaResultResta.append("Z = T - Yi")
 
-        return self.utilidad.LimpiarCadena(str(self.listaResultResta))
+        if self.Z != []:
+            self.listaResultResta.append("Z = " + self.utilidad.LimpiarCadena(str(self.Z)))
+            self.listaResultResta.append("(Z)+ = " + self.utilidad.LimpiarCadena(str(self.listaElementosCierreZ)))
+            self.listaResultResta.append("")
+        else:
+            self.listaResultResta.append("Z = 0")
+            self.listaResultResta.append("")
 
-    def get_OperacionRestaElementos(self, lista):
-        dictionary_data = self.diccionario.values()
-        diccionario = dictionary_data[0]
+            if self.listaElementosCierreZ.__len__() != diccionario.__len__():
+                self.listaResultResta.append("W = T - Xi")
+                if self.W != []:
+                    self.listaResultResta.append("W = " + self.utilidad.LimpiarCadena(str(self.W)))
+                    self.listaResultResta.append("")
+                else:
+                    self.listaResultResta.append("W = 0")
+                    self.listaResultResta.append("")
+                self.listaResultResta.append("V = T - {(A)+ U W}")
+                self.listaResultResta.append("V = " + self.utilidad.LimpiarCadena(str(self.V)))
+                self.listaResultResta.append("")
 
-        lista = list(set(lista))
-        lista.sort()
-        result = "{ " + self.utilidad.LimpiarCadena(str(diccionario)) + " } - { " + self.utilidad.LimpiarCadena(
-            str(lista)) + " }"
+        result1 = ""
+        for item in range(self.listaResultResta.__len__()):
+            result1 = result1 + str(self.listaResultResta[item]) + "\n"
 
-        return result
+        result2 = ""
+        for item1 in range(self.listaOpePosibleCombinacion.__len__()):
+            result2 = result2 + str(self.listaOpePosibleCombinacion[item1]).replace("'", '').replace('[', '').replace(']', '') + "\n"
+
+        #return str(self.listaResultResta)
+        return result1, result2
+
 
     def get_operaciones_L0(self):
         result2 = ""
