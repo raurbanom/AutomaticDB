@@ -5,6 +5,7 @@ from Utilidades import Utilidades
 
 
 class RecubrimientoMinimo(object):
+
     def __init__(self, path):
         self.path = path
 
@@ -65,16 +66,24 @@ class RecubrimientoMinimo(object):
         data += self.get_operaciones_L2()
         data += "3.1 Resultado L2\n"
 
-        result = "Recubrimiento Minimo\n"
-        result += self.print_resultado()
+        result1 = "Recubrimiento Minimo\n"
+        result1 += self.print_resultado()
+
+        data += result1
 
         self.calculo_de_llaves()
+        data += "\n4. Algoritmo Rapido\n"
+        resultAux1, resultAux2 = self.get_operacionCalculoLlaves()
+        data += resultAux1
+        data += resultAux2
+        data += "\n4.1 resultado M2\n"
 
-        result += "\nCalculo de Llaves\n"
-        result += self.print_calculo_de_llaves()
+        result2 = "\nCalculo de Llaves\n"
+        result2 += self.print_calculo_de_llaves()
 
-        data += result
+        data += result2
 
+        result = result1 + result2
 
         return result, data
 
@@ -154,7 +163,7 @@ class RecubrimientoMinimo(object):
         listaAuxX = []
         listaAuxY = []
 
-		# Debug
+        # Debug
         self.result_operacionCierreL2.append("\n")
 
         for listAux in self.listaL1X:
@@ -201,7 +210,7 @@ class RecubrimientoMinimo(object):
         cadenaF = str(cadenaI)
 
         # Debug
-        self.result_operacionCierreL2.append("   Calcular: " + " (" + cadenaF + ")+")
+        self.result_operacionCierreL2.append("   Calcular: " + "(" + cadenaF + ")+")
 
         Suma_DF = True
 
@@ -236,7 +245,7 @@ class RecubrimientoMinimo(object):
     def cierre_redundante(self, cadenaI, listaX, listaY):
         cadenaF = str(cadenaI)
         # Debug
-        self.result_operacionCierreL2.append("   Calcular: " + " (" + cadenaF + ')+')
+        self.result_operacionCierreL2.append("   Calcular: " + "(" + cadenaF + ')+')
 
         Suma_DF = True
         while Suma_DF:
@@ -270,7 +279,7 @@ class RecubrimientoMinimo(object):
     def cierre_claves(self, cadenaI):
         cadenaF = str(cadenaI)
         # Debug
-        self.result_operacionCierreL2.append("   Calcular: " + " (" + cadenaF + ")+")
+        self.result_operacionCierreL2.append("   Calcular: " + "(" + cadenaF + ")+")
 
         Suma_DF = True
         while Suma_DF:
@@ -482,7 +491,6 @@ class RecubrimientoMinimo(object):
             for cadena in self.M1:
                 if not self.es_subConjunto(cadena):
                     cierre_aux = self.cierre_claves(cadena)
-                    #self.listaOpePosibleCombinacion.append('(' + cadena + ')+ = ' + cierre_aux)
                     if str(caracteresT).__len__() == str(cierre_aux).__len__():
                         if self.buscar_cadena(caracteresT, cierre_aux):
                             self.lista_claves.append(cadena)
@@ -582,46 +590,20 @@ class RecubrimientoMinimo(object):
     # ------------------------------------------------------------------------
 
     def print_descomposicion(self):
-        result = ""
-        length = self.listaL0X.__len__()
-
-        for index in range(length):
-            result += self.utilidad.LimpiarCadena(str(self.listaL0X[index])) + '\t --> ' + \
-                      str(self.listaL0Y[index]) + "\n"
-
-        return result + '\n'
+        return self.utilidad.printLists(self.listaL0X, self.listaL0Y)
 
     def print_extranios(self):
-        result = ""
-        length = self.listaL1X.__len__()
-
-        for z in range(length):
-            result += self.utilidad.LimpiarCadena(str(self.listaL1X[z])) + "\t --> " + \
-                      str(self.listaL1Y[z]).replace('u', '') + "\n"
-
-        return result
+        return self.utilidad.printLists(self.listaL1X, self.listaL1Y)
 
     def print_resultado(self):
-        result = ""
-        length = self.listaL2X.__len__()
-
-        for z in range(length):
-            result += self.utilidad.LimpiarCadena(str(self.listaL2X[z])) + "\t --> " + \
-                      str(self.listaL2Y[z]).replace('u', '') + "\n"
-        return result
+        return self.utilidad.printLists(self.listaL2X, self.listaL2Y)
 
     def print_calculo_de_llaves(self):
-        result = ""
-        length = self.lista_claves.__len__()
+        return self.utilidad.printList(self.lista_claves)
 
-        for z in range(length):
-            result += self.utilidad.LimpiarCadena(str(self.lista_claves[z])) + "\n"
-        return result
-
-    def get_OperacionCalculoLlaves(self):
+    def get_operacionCalculoLlaves(self):
         dictionary_data = self.diccionario.values()
         diccionario = dictionary_data[0]
-        #lista = list(set(lista))
 
         self.listaResultResta.append("Z = T - Yi")
 
@@ -641,21 +623,14 @@ class RecubrimientoMinimo(object):
                 else:
                     self.listaResultResta.append("W = 0")
                     self.listaResultResta.append("")
-                self.listaResultResta.append("V = T - {(A)+ U W}")
+                self.listaResultResta.append("V = T - { (A)+ U W }")
                 self.listaResultResta.append("V = " + self.utilidad.LimpiarCadena(str(self.V)))
                 self.listaResultResta.append("")
 
-        result1 = ""
-        for item in range(self.listaResultResta.__len__()):
-            result1 = result1 + str(self.listaResultResta[item]) + "\n"
+        result1 = self.utilidad.printList(self.listaResultResta)
+        result2 = self.utilidad.printList(self.listaOpePosibleCombinacion)
 
-        result2 = ""
-        for item1 in range(self.listaOpePosibleCombinacion.__len__()):
-            result2 = result2 + str(self.listaOpePosibleCombinacion[item1]).replace("'", '').replace('[', '').replace(']', '') + "\n"
-
-        #return str(self.listaResultResta)
         return result1, result2
-
 
     def get_operaciones_L0(self):
         result2 = ""
@@ -663,25 +638,16 @@ class RecubrimientoMinimo(object):
         cant = self.result_operacionesXL0.__len__()
         for i in range(cant):
             cantImplicado = self.result_operacionesYL0[i].__len__()
-            result1 = str(self.result_operacionesXL0[i]) + " --> " + self.utilidad.LimpiarCadena(
-                str(self.result_operacionesYL0[i]))
+            result1 = str(self.result_operacionesXL0[i]) + " --> " + \
+                      self.utilidad.LimpiarCadena(str(self.result_operacionesYL0[i]))
             for j in range(cantImplicado):
-                result2 = result2 + (
-                    str(self.result_operacionesXL0[i]) + '\t --> ' + str(self.result_operacionesYL0[i][j])) + '\n'
+                result2 += str(self.result_operacionesXL0[i]) + '\t --> ' + str(self.result_operacionesYL0[i][j]) + '\n'
             result3 += "Descomponer: " + result1 + "\n" + result2 + "\n"
             result2 = ""
         return result3
 
     def get_operaciones_L1(self):
-        cant = self.result_operacionCierreL1.__len__()
-        result = ""
-        for i in range(cant):
-            result = result + str(self.result_operacionCierreL1[i]) + "\n"
-        return result
+        return self.utilidad.printList(self.result_operacionCierreL1)
 
     def get_operaciones_L2(self):
-        cant = self.result_operacionCierreL2.__len__()
-        result = ""
-        for i in range(cant):
-            result = result + str(self.result_operacionCierreL2[i]) + "\n"
-        return result
+        return self.utilidad.printList(self.result_operacionCierreL2)

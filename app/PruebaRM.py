@@ -35,14 +35,10 @@ print (recubrimiento.get_operaciones_L2())
 print(" ------------------------------------------------------------------------")
 print(" Algoritmo Calculo de llaves")
 print(" ------------------------------------------------------------------------")
-lista_Rta_Y = recubrimiento.calculo_de_llaves()
-print (recubrimiento.print_calculo_de_llaves())
-
-print(" ------------------------------------------------------------------------")
-print(" Log algoritmo caldulo de llaves")
-print(" ------------------------------------------------------------------------")
-result1, result2 = recubrimiento.get_OperacionCalculoLlaves()
+lista_Rta_Y1 = recubrimiento.calculo_de_llaves()
+result1, result2 = recubrimiento.get_operacionCalculoLlaves()
 
 print(result1)
-print("")
 print(result2)
+
+print (recubrimiento.print_calculo_de_llaves())
